@@ -1,0 +1,26 @@
+:host ::ng-deep {
+  .custom-toggle {
+    -webkit-appearance: none;
+    appearance: none;
+    height: 1.5rem;
+    width: 4.2rem;
+    background-color: #a59c9c;
+    border-radius: 25px;
+    padding: 0 4px;
+    cursor: pointer;
+  }
+
+  &.toggle-circle {
+    &::-webkit-slider-thumb {
+      background-color: rgb(250, 250, 250);
+    }
+  }
+
+  &::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 25px;
+  }
+}

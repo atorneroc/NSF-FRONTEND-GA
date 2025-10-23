@@ -1,0 +1,328 @@
+<div class="px-5">
+    <form [formGroup]="formClient">
+        <div class="pb-1">
+            <h3 class="text-base">Datos de Facturación</h3>
+        </div>
+
+        <!-- Inputs Datos Facturacion -->
+        <div class="p-fluid grid">
+
+            <!-- Tipo documento identidad -->
+            <div class="field col-12 md:col-4 mb-0">
+                <span class="p-float-label">
+                    <p-dropdown
+                        id="id_Type_Document"
+                        [class]="validateService.validate(formClient.controls['id_Type_Document'])"
+                        [options]="typeDocumentIdentity"
+                        [autoDisplayFirst]="false"
+                        optionValue="id"
+                        optionLabel="description"
+                        formControlName="id_Type_Document"
+                        [showClear]="true"
+                        (onChange)="changeTypeDocument($event.value)">
+                    </p-dropdown>
+                    <label for="id_Type_Document">Tipo Documento Identidad</label>
+                </span>
+                <error-message [formControlError]="formClient.controls['id_Type_Document']"></error-message>
+            </div>
+
+            <!-- Nro. Documento Identidad -->
+            <div class="field col-12 md:col-4 mb-0">
+                <span class="p-float-label p-input-icon-right">
+                    <input
+                        id="identity_Card_Number"
+                        [class]="validateService.validate(formClient.controls['identity_Card_Number'])"
+                        (keyup)="onRucValidator(formClient.controls['identity_Card_Number'])"
+                        (keypress)="validateOnlyNumber($event)"
+                        formControlName="identity_Card_Number"
+                        (blur)="keyEnterIdentityCardNumber($event)"
+                        (keydown.enter)="keyEnterIdentityCardNumber($event)"
+                        pInputText>
+                    <label for="identity_Card_Number">Nro. Documento Identidad</label>
+                </span>
+                <error-message
+                    [formControlError]="formClient.controls['identity_Card_Number']"
+                    [max]="maxLengthNumberDocument"
+                    [min]="minLengthNumberDocument"
+                    [maxLength]="maxLengthNumberDocument"
+                    [equalLength]="maxLengthNumberDocument"
+                ></error-message>
+            </div>
+
+            <!-- Razon Social / Nombre Completo -->
+            <div class="field col-12 md:col-4 mb-0">
+                <span class="p-float-label">
+                    <input
+                        class="ellipsis"
+                        id="business_Name"
+                        [class]="validateService.validate(formClient.controls['business_Name'])"
+                        pInputText
+                        formControlName="business_Name">
+                    <label for="business_Name">Razon Social | Nombre Completo</label>
+                </span>
+                <error-message
+                    [minLength] = "minLengthfield"
+                    [formControlError]="formClient.controls['business_Name']">
+                </error-message>
+            </div>
+
+            <!-- Nombre comercial -->
+            <div class="field col-12 md:col-4 mb-0">
+                <span class="p-float-label">
+                    <input
+                        class="ellipsis"
+                        id="commercial_Name"
+                        [class]="validateService.validate(formClient.controls['commercial_Name'])"
+                        pInputText
+                        formControlName="commercial_Name">
+                    <label for="commercial_Name">Nombre comercial</label>
+                </span>
+                <error-message [formControlError]="formClient.controls['commercial_Name']"></error-message>
+            </div>
+
+            <!-- Direccion fiscal -->
+            <div class="field col-12 md:col-4 mb-0">
+                <span class="p-float-label">
+                    <input
+                        class="ellipsis"
+                        id="fiscalAddress"
+                        [class]="validateService.validate(formClient.controls['fiscalAddress'])"
+                        formControlName="fiscalAddress"
+                        pInputText>
+                    <label for="fiscalAddress">Dirección fiscal</label>
+                </span>
+                <error-message [minLength] = "minLengthfield" [formControlError]="formClient.controls['fiscalAddress']"></error-message>
+            </div>
+
+            <!-- Segmentación -->
+            <div class="field col-12 md:col-4 mb-0">
+                <span class="p-float-label">
+                    <p-dropdown
+                        id="segmentation_Code"
+                        [options]="segmentation"
+                        [class]="validateService.validate(formClient.controls['segmentation_Code'])"
+                        [autoDisplayFirst]="true"
+                        optionLabel="description"
+                        formControlName="segmentation_Code"
+                        [showClear]="true"></p-dropdown>
+                    <label for="segmentation_Code">Segmentación de clientes</label>
+                </span>
+                <error-message [formControlError]="formClient.controls['segmentation_Code']"></error-message>
+            </div>
+
+        </div>
+
+        <div class="pb-1">
+            <h3 class="text-base">Datos Adicionales</h3>
+        </div>
+
+        <!-- Inputs Datos Operativos -->
+        <div class="p-fluid grid">
+
+            <!-- Grupo Empresarial/Categoria Cliente -->
+            <div class="field col-12 md:col-4 mb-0">
+                <span class="p-float-label">
+                    <p-dropdown
+                        id="corporate_Group_Parameter"
+                        [class]="validateService.validate(formClient.controls['corporate_Group_Parameter'])"
+                        [options]="businessGroups"
+                        optionValue="id"
+                        optionLabel="description"
+                        placeholder="Selecciona un grupo empresarial"
+                        formControlName="corporate_Group_Parameter"
+                        [showClear]="true">
+                    </p-dropdown>
+                    <label for="corporate_Group_Parameter">Grupo Empresarial o Categoria Cliente</label>
+                </span>
+                <error-message [formControlError]="formClient.controls['corporate_Group_Parameter']"></error-message>
+            </div>
+
+            <!-- Sector Economico -->
+            <div class="field col-12 md:col-4 mb-0">
+                <span class="p-float-label">
+                    <p-dropdown
+                        id="industry_Code"
+                        [class]="validateService.validate(formClient.controls['industry_Code'])"
+                        [options]="economicSector"
+                        optionValue="id"
+                        optionLabel="description"
+                        placeholder="Selecciona un sector economico"
+                        formControlName="industry_Code"
+                        [showClear]="true">
+                    </p-dropdown>
+                    <label for="industry_Code">Sector Económico</label>
+                </span>
+                <error-message [formControlError]="formClient.controls['industry_Code']"></error-message>
+            </div>
+
+            <!-- Tipo de cliente -->
+            <div class="field col-12 md:col-4 mb-0">
+                <span class="p-float-label">
+                    <p-dropdown
+                        id="client_Type_Parameter"
+                        [class]="validateService.validate(formClient.controls['client_Type_Parameter'])"
+                        [options]="customerType"
+                        optionValue="id"
+                        optionLabel="description"
+                        formControlName="client_Type_Parameter"
+                        [showClear]="true"></p-dropdown>
+                    <label for="client_Type_Parameter">Tipo de cliente</label>
+                </span>
+            </div>
+
+           <!-- Sub Tipo de cliente -->
+            <div class="field col-12 md:col-4 mb-0">
+                <span class="p-float-label">
+                    <p-dropdown
+                        id="client_SubType_Parameter"
+                        [class]="validateService.validate(formClient.controls['client_SubType_Parameter'])"
+                        [options]="customerSubType"
+                        optionValue="id"
+                        optionLabel="description"
+                        [autoDisplayFirst]="false"
+                        formControlName="client_SubType_Parameter"
+                        [showClear]="true"></p-dropdown>
+                    <label for="client_SubType_Parameter">Sub tipo de cliente</label>
+                </span>
+                <error-message [formControlError]="formClient.controls['client_SubType_Parameter']"></error-message>
+            </div>
+
+            <!-- Cuenta Fedex -->
+            <div class="field col-12 md:col-4 mb-0">
+                <span class="p-float-label">
+                    <input
+                        id="fedex_Account"
+                        [class]="validateService.validate(formClient.controls['fedex_Account'])"
+                        type="text"
+                        pInputText
+                        formControlName="fedex_Account">
+                    <label for="fedex_Account">Cuenta FEDEX</label>
+                </span>
+                <error-message
+                    [maxLength] = "maxLengthFedexAccount"
+                    [formControlError]="formClient.controls['fedex_Account']"
+                ></error-message>
+            </div>
+
+            <!-- País -->
+            <div class="flex-column col-12 md:col-4 mb-0">
+                <span class="p-float-label">
+                    <p-dropdown
+                        id="countries"
+                        [options]="countries"
+                        placeholder="Selecciona un país"
+                        [class]="validateService.validate(formClient.controls['countries'])"
+                        optionLabel="description"
+                        optionValue="id"
+                        formControlName="countries"
+                        [showClear]="true"
+                        [filter]="true"
+                        (onFilter)="onCountryFilter($event)"
+                        (onChange)="onChangeCountry($event.value)"></p-dropdown>
+                    <label for="countries">País</label>
+                </span>
+                <error-message [formControlError]="formClient.controls['countries']"></error-message>
+            </div>
+
+            <!-- Ubicación -->
+            <div class="field col-12 md:col-4 mb-0">
+                <span class="p-float-label">
+                    <p-dropdown
+                        [options]="lLocations"
+                        [autoDisplayFirst]="false"
+                        [class]="validateService.validate(formClient.controls['ubigeo_id'])"
+                        optionLabel="description"
+                        formControlName="ubigeo_id"
+                        [showClear]="true"
+                        optionValue="id"
+                        [filter]="true"></p-dropdown>
+                    <label>Ubicación</label>
+                </span>
+                <error-message [formControlError]="formClient.controls['ubigeo_id']"></error-message>
+            </div>
+
+            <!-- Correo facturacion -->
+            <div class="field col-12 md:col-4 mb-0">
+                <span class="p-float-label">
+                    <input
+                        class="ellipsis"
+                        id="billing_Email"
+                        type="text"
+                        pInputText
+                        formControlName="billing_Email"
+                        [class]="validateService.validate(formClient.controls['billing_Email'])">
+                    <label for="billing_Email">Correo Facturación</label>
+                </span>
+                <error-message [formControlError]="formClient.controls['billing_Email']"></error-message>
+            </div>
+
+            <!-- Codigo SAP -->
+            <div class="field col-12 md:col-4 mb-0">
+                <span class="p-float-label">
+                    <input
+                        id="id_sap"
+                        type="text"
+                        pInputText
+                        (keypress)="onKeyPress($event)"
+                        [maxlength]="10"
+                        formControlName="id_sap"
+                        [class]="validateService.validate(formClient.controls['id_sap'])">
+                    <label for="id_sap">Código SAP</label>
+                </span>
+                <error-message [formControlError]="formClient.controls['id_sap']"></error-message>
+            </div>
+
+            <!-- Datos adicionales -->
+            <div class=" flex flex-row field col-12 md:col-8">
+
+                <!-- Migrar información SAP -->
+                <div class=" col-12 md:col-4">
+                    <div class=" field-checkbox">
+                        <p-checkbox
+                            id="migrate_sap_information"
+                            formControlName="migrate_sap_information"
+                            [binary]="true"
+                            [disabled]="true"
+                            inputId="binary"
+                        ></p-checkbox>
+                        <label class="pl-2">Migrar información SAP</label>
+                    </div>
+                </div>
+
+                <!-- Agente Retención -->
+                <div class=" col-12 md:col-4">
+                    <div class="field-checkbox">
+                        <p-checkbox
+                            id="withholding_Agent"
+                            formControlName="withholding_Agent"
+                            [binary]="true"
+                            inputId="binary"
+                        ></p-checkbox>
+                        <label class="pl-2">Agente Retención</label>
+                    </div>
+                </div>
+
+                <!-- Autorizar Fedex -->
+                <div class="col-12 md:col-4">
+                    <div class="field-checkbox">
+                        <p-checkbox
+                            id="authorized_Fedex_Account"
+                            formControlName="authorized_Fedex_Account"
+                            [binary]="true"
+                            inputId="binary"
+                    ></p-checkbox>
+                        <label class="pl-2">Autorizar FEDEX</label>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-12 text-center py-3">
+            <button (click)="registerClient()" pButton class="b-primary px-5 py-2 focus-visible-general" label="Crear Cliente">
+            </button>
+        </div>
+
+    </form>
+</div>

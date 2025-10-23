@@ -1,0 +1,55 @@
+<div *ngIf="formControlError.touched && formControlError.errors" class="text-xs font-semibold p-error block mt-1">
+
+    <div *ngIf="formControlError.errors['required']" @errorAnimation>
+        Este campo es requerido.
+    </div>
+
+    <div *ngIf="formControlError.errors['email']" @errorAnimation>
+        Verificar la dirección del email.
+    </div>
+
+    <div *ngIf="formControlError.errors['equalValidator']" @errorAnimation>
+        Debe tener {{equalLength}} caracteres.
+    </div>
+
+    <div *ngIf="formControlError.errors['equalLength']" @errorAnimation>
+        Debe tener {{maxLength}} caracteres.
+    </div>
+
+    <div *ngIf="formControlError.errors['minlength']" @errorAnimation>
+        Debe tener {{minLength}} caracteres.
+    </div>
+
+    <div *ngIf="formControlError.errors['maxlength']" @errorAnimation>
+        Excediste el máximo valor permitido.
+    </div>
+
+    <div *ngIf="formControlError.errors['errorLengthPhone']" @errorAnimation>
+        Por favor, ingresa un teléfono válido.
+    </div>
+
+    <div *ngIf="formControlError.errors['rucValidator']" @errorAnimation>
+        El RUC debe de empezar con los dígitos 1 o 2.
+    </div>
+
+    <div *ngIf="formControlError.errors['errorLengthPercentage']" @errorAnimation>
+        Solo se permite valores de 0 a 100.
+    </div>
+
+    <div *ngIf="formControlError.errors['pattern']" @errorAnimation>
+        Por favor, ingresa un correo válido.
+    </div>
+
+    <div *ngIf="formControlError.errors['patternn']" @errorAnimation>
+        Excediste el máximo valor permitido.
+  </div>
+
+    <div *ngIf="formControlError.errors['min']" @errorAnimation>
+        El mínimo valor es {{min}}.
+    </div>
+
+    <div *ngIf="formControlError.errors['max']" @errorAnimation>
+        El máximo valor es {{max}}.
+    </div>
+
+</div>

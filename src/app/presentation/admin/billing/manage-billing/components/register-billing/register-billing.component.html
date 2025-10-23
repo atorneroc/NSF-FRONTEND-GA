@@ -1,0 +1,220 @@
+<div class="px-5">
+
+    <form [formGroup]="formBilling">
+
+        <div class="p-fluid grid">
+
+            <!-- Empresa -->
+            <div class="field col-12 md:col-4">
+                <span class="p-float-label">
+                    <p-dropdown [options]="lCompany" [autoDisplayFirst]="false" optionLabel="name" optionValue="id"
+                        [showClear]="true" formControlName="company_id" (onChange)="onChangeCompany()">
+                    </p-dropdown>
+                    <label>Empresa</label>
+                </span>
+            </div>
+
+            <!-- Sucursal -->
+            <div class="field col-12 md:col-4">
+                <span class="p-float-label">
+                    <p-dropdown [options]="lBranchOffice" [autoDisplayFirst]="false" [showClear]="true"
+                        optionLabel="name" optionValue="id" formControlName="branch_office_id"
+                        (onChange)="onChangeBranch()">
+                    </p-dropdown>
+                    <label>Sucursal</label>
+                </span>
+            </div>
+
+            <!-- Unidad -->
+            <div class="field col-12 md:col-4">
+                <span class="p-float-label">
+                    <p-dropdown [options]="lUnit" [autoDisplayFirst]="false" [showClear]="true" optionLabel="name"
+                        optionValue="id" formControlName="business_unit_id">
+                    </p-dropdown>
+                    <label>Unidad</label>
+                </span>
+            </div>
+
+            <!-- Tipo de documento -->
+            <div class="field col-12 md:col-4">
+                <span class="p-float-label">
+                    <p-dropdown [options]="lTypeDocumentIdentity" [autoDisplayFirst]="false" [showClear]="true"
+                        optionLabel="description" optionValue="id" formControlName="document_type_id">
+                    </p-dropdown>
+                    <label>Tipo Documento</label>
+                </span>
+            </div>
+
+            <!-- Serie -->
+            <div class="field col-12 md:col-4">
+                <span class="p-float-label">
+                    <input pInputText class="w-full">
+                    <label>Serie</label>
+                </span>
+            </div>
+
+            <!-- Cliente -->
+            <div class="field col-12 md:col-4">
+                <span class="p-float-label">
+                    <p-dropdown
+                        [options]="lClient"
+                        [autoDisplayFirst]="false"
+                        [showClear]="true"
+                        [filter]="true"
+                        optionLabel="business_name"
+                        optionValue="id"
+                        formControlName="client_id"
+                        emptyMessage="No hay datos para mostrar"
+                        emptyFilterMessage="Sin resultados"
+                        (onFilter)="getClientByName($event.filter)"
+                        (onChange)="getClientById($event.value)">
+                    </p-dropdown>
+                    <label>Cliente</label>
+                </span>
+            </div>
+
+        </div>
+
+        <p-card *ngIf="Client">
+            <div class="grid">
+                <div class="col-12 flex flex-column">
+                    <div class="grid">
+
+                        <div class="col-12 md:col-3">
+                            <span class="text-500">Tipo Doc</span>
+                            <div class=" font-semibold pt-3">{{Client.identity_Card_Type_Description}}</div>
+                        </div>
+
+                        <div class="col-12 md:col-3">
+                            <span class="text-500">Razon Social</span>
+                            <div class=" font-semibold pt-3">{{Client.business_Name}}</div>
+                        </div>
+
+                        <div class="col-12 md:col-2">
+                            <span class="text-500">Tipo de Cambio</span>
+                            <div class=" font-semibold pt-3">S/ {{exchangeRateValue ? exchangeRateValue : '0.00'}}
+                            </div>
+                        </div>
+
+                        <div class="col-12 md:col-2">
+                            <span class="text-500">Días de Crédito</span>
+                            <div class=" font-semibold pt-3">{{daysBilling || '0'}} días</div>
+                        </div>
+
+                        <div class="col-12 md:col-2">
+                            <span class="text-500">Condición de venta</span>
+                            <div class=" font-semibold pt-3">0002 Crédito</div>
+                        </div>
+
+                        <div class="col-12 md:col-6 pt-3">
+                            <label class="text-500">Tipo de moneda</label>
+                            <div class="formgrid grid pt-3">
+                                <div class="col-6">
+                                    <p-radioButton id="currencyType_1" value="2" formControlName="currency_type"
+                                        [disabled]="true">
+                                    </p-radioButton>
+                                    <label for="currencyType_1"> $ Dolares</label>
+                                </div>
+                                <div class="col-6">
+                                    <p-radioButton id="currencyType_2" value="1" formControlName="currency_type"
+                                        [disabled]="true">
+                                    </p-radioButton>
+                                    <label for="currencyType_2"> S/ Soles</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 md:col-6 pt-3">
+                            <span class="text-500">Dirección</span>
+                            <div class=" font-semibold pt-3">{{address || '-'}}</div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </p-card>
+
+        <div *ngIf="Client" class="pt-4">
+            <p-card>
+                <div class="p-fluid grid">
+
+                    <!-- Nro Orden Compra -->
+                    <div class="field col-12 md:col-4">
+                        <span class="p-float-label">
+                            <input pInputText class="w-full">
+                            <label>Nro Orden Compra</label>
+                        </span>
+                    </div>
+
+                    <!-- Fecha de emision -->
+                    <div class="field col-12 md:col-4">
+                        <span class="p-float-label">
+                            <p-calendar
+                                [showIcon]="true"
+                                [minDate]="minEmittionDate"
+                                (onSelect)="onChangeEmittionDate($event)"
+                                formControlName="broadcast_date">
+                            </p-calendar>
+                            <label>Fecha de emision</label>
+                        </span>
+                    </div>
+
+                    <!-- Fecha de vencimiento -->
+                    <div class="field col-12 md:col-4">
+                        <span class="p-float-label">
+                            <p-calendar
+                                [showIcon]="true"
+                                [disabled]="true"
+                                formControlName="expiration_date"></p-calendar>
+                            <label>Fecha de Vencimiento</label>
+                        </span>
+                    </div>
+
+                    <!-- Referencia y tipo de documento -->
+                    <div class="col-12 md:col-4">
+                        <span class="p-float-label">
+                            <input pInputText class="w-full">
+                            <label>Referencia y tipo de documento</label>
+                        </span>
+                    </div>
+
+                    <!-- Serie -->
+                    <div class="col-12 md:col-1">
+                        <span class="p-float-label">
+                            <input pInputText class="w-full">
+                            <label>Serie</label>
+                        </span>
+                    </div>
+
+                    <!-- Correlativo -->
+                    <div class="col-12 md:col-3">
+                        <span class="p-float-label">
+                            <input pInputText class="w-full">
+                            <label>Correlativo</label>
+                        </span>
+                    </div>
+
+                    <!-- Observaciones -->
+                    <div class="col-12 md:col-4">
+                        <span class="p-float-label">
+                            <input formControlName="comment" pInputText class="w-full">
+                            <label>Observaciones</label>
+                        </span>
+                    </div>
+
+                </div>
+            </p-card>
+        </div>
+
+    </form>
+
+    <div class="col-12 text-center py-4">
+        <button
+            pButton
+            class="b-primary px-5 py-2"
+            label="Generar Factura"
+            (click)="registerBilling()">
+        </button>
+    </div>
+
+</div>

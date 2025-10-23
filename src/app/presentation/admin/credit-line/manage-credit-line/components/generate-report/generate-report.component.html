@@ -1,0 +1,118 @@
+<div class="px-5 my-4">
+  <form [formGroup]="reportForm">
+      <div class="p-fluid grid pt-2 px-8 mx2">
+            <!-- TIPO  DE REPORTE -->
+            <div class="field col-12 md:col-12 py-0">
+              <span class="p-float-label">
+                  <p-dropdown
+                      [autoDisplayFirst]="false"
+                      optionLabel="name"
+                      [showClear]="true"
+                      [options]="typeCreditLineList"
+                      [autoDisplayFirst]="false"
+                      [showClear]="true"
+                      appendTo="body"
+                      optionValue="id"
+                      [class]="validateService.validate(reportForm.controls['typeCreditLine'])"
+                      formControlName="typeCreditLine"
+                  ></p-dropdown>
+                  <label>Tipo de Reporte</label>
+              </span>
+            </div>
+          <!-- EMPRESA  -->
+          <div class="field col-12 md:col-12 py-0">
+              <span class="p-float-label">
+                  <p-dropdown
+                      [autoDisplayFirst]="false"
+                      optionLabel="name"
+                      [showClear]="true"
+                      [options]="companyList"
+                      [autoDisplayFirst]="false"
+                      [showClear]="true"
+                      appendTo="body"
+                      optionValue="id"
+                      formControlName="company"
+                  ></p-dropdown>
+                  <label>Empresa</label>
+              </span>
+          </div>
+          <!-- ESTADOS  -->
+            <div class="field col-12 md:col-12 py-0">
+              <span class="p-float-label">
+                  <p-dropdown
+                      [autoDisplayFirst]="false"
+                      optionLabel="name"
+                      [showClear]="true"
+                      [options]="statusCreditLineList"
+                      [autoDisplayFirst]="false"
+                      [showClear]="true"
+                      appendTo="body"
+                      optionValue="id"
+                      formControlName="statusCreditLine"
+                  ></p-dropdown>
+                  <label>Estados</label>
+              </span>
+            </div>
+
+            <p-accordion class="field col-12 md:col-12 py-0">
+                <p-accordionTab header="Filtros Avanzados">
+
+                    <!-- CLIENTE -->
+                    <div class="field col-12 md:col-12 py-0">
+                        <span class="p-float-label w-full">
+                            <p-autoComplete
+                                [delay]="0"
+                                class="w-full"
+                                [suggestions]="clientList"
+                                (completeMethod)="getClient($event.query);"
+                                [showEmptyMessage]="true"
+                                [autoHighlight]="true"
+                                [field]="'client_code'"
+                                [minLength]="1"
+                                [maxlength]="120"
+                                emptyMessage="Sin resultados"
+                                formControlName="client_id"
+                                [showClear]="true"
+                                #client_code>
+                            </p-autoComplete>
+                            <!-- (onSelect)="selectClient($event)" -->
+                            <!-- (onClear)="clearClientData()" -->
+                            <label>Buscar Cliente</label>
+                        </span>
+                    </div>
+
+                    <!-- MONEDA -->
+                    <div class="field col-12 md:col-12 py-0">
+                        <span class="p-float-label">
+                            <p-dropdown
+                                [autoDisplayFirst]="false"
+                                optionLabel="name"
+                                [showClear]="true"
+                                [options]="monedaCreditLineList"
+                                [autoDisplayFirst]="false"
+                                [showClear]="true"
+                                appendTo="body"
+                                optionValue="id"
+                                formControlName="monedaCreditLine"
+                            ></p-dropdown>
+                            <label>Moneda</label>
+                        </span>
+                    </div>
+                </p-accordionTab>
+            </p-accordion>
+      </div>
+  </form>
+
+  <footer class="col-12 text-center font-bold mb-0 pb-0">
+      <button
+          class="col-4 b-primary button-class mr-2"
+          type="button"
+          (click)="DownloadReportExcel()">Generar Reporte
+      </button>
+      <button
+          class="col-4 b-primary button-class ml-2"
+          type="button"
+          (click)="closeModal()">Cancelar
+      </button>
+  </footer>
+</div>

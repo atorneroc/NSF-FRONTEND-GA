@@ -1,0 +1,77 @@
+<div class="grid md:px-8 md:py-2">
+    <div class="col-12">
+        <h1 class="text-2xl">
+            Direcciones
+        </h1>
+    </div>
+
+    <div class="col-12 flex flex-column">
+        <ng-container *ngFor="let address of lAddress; let i = index" class="w-full">
+            <div class="grid pb-3">
+
+                <div class="col-12 flex flex-column py-2">
+                    <span class="font-bold text-xl">{{address.address_Type_Description}}</span>
+                    <p-divider></p-divider>
+                </div>
+
+                <!-- Direccion -->
+                <div class="col-12 md:col-3 pt-0">
+                    <span class="font-semibold">Dirección:</span>
+                    <div class="pt-3  ellipsis">{{address.address? address.address: '-'}}</div>
+                </div>
+
+                <!-- Tipo de direccion -->
+                <div class="col-12 md:col-3 pt-0">
+                    <span class="font-semibold">Tipo de dirección:</span>
+                    <div class="pt-3">{{address.address_Type_Description? address.address_Type_Description:'-'}}</div>
+                </div>
+
+                <!-- Ubigeo -->
+                <div *ngIf="address.detail_Code === FISCAL_ADDRESS" class="col-12 md:col-2 pt-0">
+                    <span class="font-semibold">Ubigeo:</span>
+                    <div class="pt-3">{{address.ubigeo_Code? address.ubigeo_Code:'-'}}</div>
+                </div>
+
+                <!-- Unidad -->
+                <div *ngIf="address.detail_Code === OPERATIONAL_ADDRESS" class="col-12 md:col-2 pt-0">
+                    <span class="font-semibold">Unidad:</span>
+                    <div class="pt-3">{{address.unit_Description? address.unit_Description:'-'}}</div>
+                </div>
+
+                <!-- Estado -->
+                <div class="col-12 md:col-2 pt-0">
+                    <span class="font-semibold">Estado:</span>
+                    <div class="pt-3">{{address.status_Description? address.status_Description:'-'}}</div>
+                </div>
+
+                <div *ngIf="client?.status" class="col-12 md:col-1 text-base text-right pt-0">
+                    <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-text text-base pt-0"
+                        pTooltip="Editar Dirección" tooltipPosition="top" placeholder="Top"
+                        (click)="showModalUpdateDirection(address.id)"></button>
+                    <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-text text-base pt-0"
+                        pTooltip="Dar de baja Dirección" tooltipPosition="top" placeholder="Top"
+                        (click)="deleteAddressById(address.id, address.address_Type_Description)"></button>
+                </div>
+
+                <!-- Codigo postal -->
+                <div *ngIf="address.detail_Code === FISCAL_ADDRESS" class="col-12 md:col-3">
+                    <span class="font-semibold">Código postal:</span>
+                    <div class="pt-3">{{address.postal_Code? address.postal_Code:'-'}}</div>
+                </div>
+
+                <!-- Ubicacion -->
+                <div *ngIf="address.detail_Code === FISCAL_ADDRESS" class="col-12 md:col-3">
+                    <span class="font-semibold">Ubicación:</span>
+                    <div class="pt-3">{{address.ubigeo_Description? address.ubigeo_Description:'-'}}</div>
+                </div>
+            </div>
+        </ng-container>
+    </div>
+
+    <div class="col-12 text-center pt-5">
+            <button [disabled]= "!client?.status" pButton class="b-primary px-5" label="Crear dirección"
+                (click)="showModalRegisterDirection()">
+            </button>
+    </div>
+</div>
+

@@ -1,0 +1,153 @@
+:host ::ng-deep {
+    .ledger-accounts .p-card-body {
+        padding-top: 0;
+        padding-bottom: 0;
+    }
+    .ledger-accounts .p-card-body .p-card-content {
+        padding-bottom: 0;
+    }
+
+    .position-icon {
+        position: absolute;
+        left: -12px;
+        top: 22px;
+    }
+    .span-total-liquidation{
+      border: none !important;
+      box-shadow: 0px 5px 5px 0px rgba(51, 51, 51, 0.3) !important;
+      border-radius: 5px;
+      margin: 0;
+      display: inline-flex;
+      user-select: none;
+      align-items: center;
+      vertical-align: bottom;
+      overflow: hidden;
+      position: relative;
+      padding: 0.643rem 0.75rem;
+    }
+    .p-fluid .p-fileupload .p-button {
+        color: var(--red-500) !important;
+        background-color: transparent !important;
+        border: none;
+    }
+
+    p-fileUpload {
+        width: 100%;
+
+        .p-fileupload-buttonbar {
+            display: none;
+        }
+
+        .p-fileupload-content {
+            border: 3px dashed red;
+            border-radius: 8px;
+            background-color: #fff1f1;
+        }
+    }
+
+    .file-upload-label {
+        position: absolute;
+        width: 100%;
+        text-align: center;
+        left: 0;
+        right: 0;
+        padding-top: 10px;
+        color: #f44336;
+        top:0;
+    }
+
+    .file-upload-save {
+        position: absolute;
+        right: 10px;
+        top: 10px;
+        cursor: pointer;
+        color: #f44336;
+    }
+
+    .add-files {
+        position: absolute;
+        right: 40px;
+        top: 10px;
+        cursor: pointer;
+        color: #f44336;
+    }
+
+}
+
+.focus-visible-eraser {
+    &:focus-visible {
+      outline: 3px solid rgb(0, 0, 0);
+    }
+  }
+  .focus-visible-slope {
+    &:focus-visible {
+      outline: 3px solid rgb(0, 0, 0);
+    }
+  }
+
+.span-total-liquidation{
+    border: none !important;
+    box-shadow: 0px 5px 5px 0px rgba(51, 51, 51, 0.3) !important;
+    border-radius: 5px;
+    margin: 0;
+    display: inline-flex;
+    user-select: none;
+    align-items: center;
+    vertical-align: bottom;
+    overflow: hidden;
+    position: relative;
+    padding: 0.643rem 0.75rem;
+  }
+  .table-liquidation-head{
+    border: none;
+      background-color: var(--primary-color);
+      color: #ffffff;
+      border-top-left-radius: 1rem;
+      border-top-right-radius: 1rem;
+      margin-top: 2.5rem;
+      margin-bottom: 0.5rem;
+  }
+  .test{
+    box-shadow: 0px 5px 5px 0px rgba(51, 51, 51, 0.3) !important;
+    border-bottom-right-radius: 1rem;
+    border-bottom-left-radius: 1rem;
+  }
+  .table-liquidation-group{
+      padding-left: 0.5rem;
+      padding-right: 0rem;
+      // border-bottom: 1px solid #dbdbdb !important;
+  }
+  .table-b-liquidation-detail{
+    padding-left: 0rem !important;
+  }
+  .table-b-liquidation-detail:hover {
+    &:hover {
+        background-color: #ffffff !important;
+        color: var(--primary-color) !important;
+    }
+}
+  .table-liquidation-add-detail{
+    color: var(--primary-color) !important;
+    width: auto !important;
+    margin-bottom: 0px !important;
+    padding: 0.1rem;
+    min-width: 0rem;
+  }
+  .table-liquidation-add-detail .pi{
+    font-size: 1.8rem !important;
+  }
+  .table-liquidation-group .table-liquidation-delete-detail{
+    font-size: 1.3rem !important;
+  }
+  .table-liquidation-detail{
+    //border-top: 1px solid #000000 !important;
+    border-bottom: 0.5px solid #dbdbdb !important;
+    margin-top: 0.1rem !important;
+  }
+  .table-liquidation-detail .pi {
+    font-size: 1.3rem !important;
+  }
+
+  .p-button-option:focus {
+    background-color: #4582BF !important;
+  }

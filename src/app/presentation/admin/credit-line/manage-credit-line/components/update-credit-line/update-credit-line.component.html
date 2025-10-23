@@ -1,0 +1,401 @@
+<div *ngIf="!isLoading" class="px-5">
+    <form *ngIf="formCreditLine" [formGroup]="formCreditLine">
+        <div class="p-0 my-0 grid col-12">
+            <span class="col-8 py-0">
+                <h3 class="text-xl font-bold">Información de Cliente</h3>
+            </span>
+
+            <span class="col-2 flex justify-content-end py-0">
+                <span class="align-self-center mr-2 font-bold">Bloqueo por Deuda</span>
+                <p-inputSwitch
+                    class="align-self-center"
+                    formControlName="creditLine"
+                    (onChange)="changeCreditLine($event)">
+                </p-inputSwitch>
+            </span>
+            <span class="col-2 flex justify-content-end py-0">
+              <span class="align-self-center mr-2 font-bold">Bloqueo Operativo</span>
+              <p-inputSwitch
+                  class="align-self-center"
+                  formControlName="operationalLock"
+                  (onChange)="changeOperationalLock($event)">
+              </p-inputSwitch>
+            </span>
+        </div>
+
+        <div class="p-fluid grid">
+            <!-- Cliente -->
+            <div class="field col-12 md:col-8 pb-0">
+                <span class="p-float-label">
+                    <input
+                        class="text-base"
+                        id="client_Name"
+                        [class]="validateService.validate(formCreditLine.controls['client_Name'])"
+                        [readOnly]="true"
+                        formControlName="client_Name"
+                        pInputText>
+                    <label for="client_Name">Cliente</label>
+                </span>
+            </div>
+
+            <!-- RUC -->
+            <div class="field col-12 md:col-4 pb-0">
+                <span class="p-float-label">
+                    <input
+                        id="identity_Card_Number"
+                        formControlName="identity_Card_Number"
+                        [class]="validateService.validate(formCreditLine.controls['identity_Card_Number'])"
+                        [readOnly]="true"
+                        pInputText>
+                    <label for="identity_Card_Number">RUC</label>
+                </span>
+                <error-message [formControlError]="formCreditLine.controls['identity_Card_Number']"></error-message>
+            </div>
+
+            <!-- SEGMENTACION COMERCIAL -->
+            <div class="field col-12 md:col-4 py-0">
+                <span class="p-float-label">
+                    <input
+                        formControlName="segmentation_Code_Description"
+                        [class]="validateService.validate(formCreditLine.controls['segmentation_Code_Description'])"
+                        [readOnly]="true"
+                        pInputText>
+                    <label>Segmentación comercial</label>
+                </span>
+                <error-message [formControlError]="formCreditLine.controls['segmentation_Code_Description']"></error-message>
+            </div>
+
+            <!-- CODIGO SAP  -->
+            <div class="field col-12 md:col-4 py-0">
+                <span class="p-float-label">
+                    <input
+                        formControlName="id_Sap"
+                        [class]="validateService.validate(formCreditLine.controls['id_Sap'])"
+                        [readOnly]="true"
+                        pInputText>
+                    <label>Cod. SAP</label>
+                </span>
+                <error-message [formControlError]="formCreditLine.controls['id_Sap']"></error-message>
+            </div>
+
+            <div class="py-0 my-0 grid col-12">
+                <span class="col-8 py-0 my-0">
+                    <h3 class="text-xl font-bold mb-0">Información de Crédito</h3>
+                </span>
+                <span class="py-0 my-0 col-4 flex justify-content-end">
+                    <span class="align-self-center mr-2 font-bold">Crédito Ilimitado</span>
+                    <p-inputSwitch
+                        class="align-self-center"
+                        formControlName="unlimitedCredit"
+                        (onChange)="changeUnlimitedCredit($event)"                        
+                    ></p-inputSwitch>
+                </span>
+            </div>
+
+            <div class="col-12 py-0 my-0">
+                <p-tabView class="tab-secondary pb-0">
+                    <!-- CREDITO DIRECTO -->
+                    <p-tabPanel header="Crédito Directo">
+                        <div class="grid pt-2 pb-0">
+                            <!-- Empresa -->
+                            <div class="field col-12 md:col-3 pb-0">
+                                <span class="p-float-label">
+                                    <input
+                                        [class.p-disabled]="true"
+                                        [readOnly]="true"
+                                        formControlName="company_Name"
+                                        pInputText>
+                                    <label>Empresa</label>
+                                </span>
+                                <error-message [formControlError]="formCreditLine.controls['company_Name']"></error-message>
+                            </div>
+
+                            <!-- FECHA DE EMISION -->
+                            <div class="field col-12 md:col-3 pb-0">
+                                <span class="p-float-label">
+                                    <p-calendar
+                                        dateFormat="dd/mm/yy"
+                                        formControlName="issue_date_direct_credit"
+                                        [class]="validateService.validate(formCreditLine.controls['issue_date_direct_credit'])"
+                                        appendTo="body"
+                                        [disabled]="true"
+                                        [showIcon]="true"
+                                        placeholder="Selecciona una fecha" >
+                                    </p-calendar>
+                                    <label>Fecha de Emisión</label>
+                                </span>
+                                <error-message [formControlError]="formCreditLine.controls['issue_date_direct_credit']"></error-message>
+                            </div>
+
+                            <!-- Moneda -->
+                            <div class="field col-12 md:col-3 pb-0">
+                                <span class="p-float-label">
+                                    <p-dropdown
+                                        [options]="currency"
+                                        [class]="validateService.validate(formCreditLine.controls['id_Money'])"
+                                        [autoDisplayFirst]="false"
+                                        optionLabel="name"
+                                        optionValue="id"
+                                        formControlName="id_Money"
+                                        [disabled]="hasConsumption"
+                                        [showClear]="true"
+                                    ></p-dropdown>
+                                    <label>Moneda</label>
+                                </span>
+                                <error-message [formControlError]="formCreditLine.controls['id_Money']"></error-message>
+                            </div>
+
+                            <!-- Linea Credito -->
+                            <div class="field col-12 md:col-3 pb-0">
+                                <span class="p-float-label">
+                                    <input
+                                        [class]="validateService.validate(formCreditLine.controls['amount_Line'])"
+                                        mode="decimal"
+                                        pInputText
+                                        [maxlength]="12"
+                                        formControlName="amount_Line"
+                                        (keypress)="validateOnlyNumber($event)">
+                                    <label>Línea de Crédito Otorgada</label>
+                                </span>
+                                <error-message [maxLength] = "maxLengthAmountLineDirect" [min]="amountLineMinValue" [formControlError]="formCreditLine.controls['amount_Line']"></error-message>
+                            </div>
+
+                            <!-- Modalidad -->
+                            <div class="field col-12 md:col-3 py-0">
+                                <span class="p-float-label">
+                                    <p-dropdown
+                                        [class]="validateService.validate(formCreditLine.controls['payment_modality_id'])"
+                                        optionLabel="description"
+                                        [showClear]="true"
+                                        [options]="modalities"
+                                        [autoDisplayFirst]="false"
+                                        [showClear]="true"
+                                        optionLabel="name"
+                                        appendTo="body"
+                                        optionValue="id"
+                                        formControlName="payment_modality_id"
+                                        (onChange)="onChangeModality($event.value)"
+                                    ></p-dropdown>
+                                    <label>Modalidad de Pago</label>
+                                </span>
+                                <error-message [formControlError]="formCreditLine.controls['payment_modality_id']"></error-message>
+                            </div>
+
+                            <!-- Sobregiro -->
+                            <div class="field col-12 md:col-3 py-0">
+                                <span class="p-float-label">
+                                    <input
+                                        type="number"
+                                        [class]="validateService.validate(formCreditLine.controls['overdraft_Percentage'])"
+                                        pInputText
+                                        name="overdraft_Percentage"
+                                        formControlName="overdraft_Percentage"
+                                        (keypress)="validateOnlyNumber($event)" >
+                                    <label>% Sobregiro</label>
+                                </span>
+                                <error-message [min]="overdraftPercentageMinValue" [max]="overdraftPercentageMaxValue" [formControlError]="formCreditLine.controls['overdraft_Percentage']"></error-message>
+                            </div>
+
+                            <!-- GESTOR DE COBRANZA  -->
+                            <div class="field col-12 md:col-3 py-0">
+                                <span class="p-float-label">
+                                    <p-dropdown
+                                        [autoDisplayFirst]="false"
+                                        [class]="validateService.validate(formCreditLine.controls['collection_manager_id'])"
+                                        optionLabel="description"
+                                        [showClear]="true"
+                                        [options]="collectionManagerList"
+                                        [autoDisplayFirst]="false"
+                                        [showClear]="true"
+                                        optionLabel="full_name"
+                                        appendTo="body"
+                                        optionValue="id"
+                                        formControlName="collection_manager_id"
+                                    ></p-dropdown>
+                                    <label>Gestor de Cobranza</label>
+                                </span>
+                                <error-message [formControlError]="formCreditLine.controls['collection_manager_id']"></error-message>
+                            </div>
+
+                            <!-- OBSERVACION CREDITO DIRECTO -->
+                            <div class="field col-12 md:col-12 py-0">
+                                <span class="p-float-label">
+                                    <textarea
+                                        class="w-full"
+                                        [class]="validateService.validate(formCreditLine.controls['observation'])"
+                                        rows="2"
+                                        cols="30"
+                                        pInputTextarea
+                                        [maxlength]="500"
+                                        placeholder="Ingresa hasta 500 caracteres"
+                                        [autoResize]="false"
+                                        formControlName="observation"
+                                    ></textarea>
+                                    <label>Observación</label>
+                                </span>
+                                <error-message [min]="overdraftPercentageMinValue" [max]="overdraftPercentageMaxValue" [formControlError]="formCreditLine.controls['observation']"></error-message>
+                            </div>
+                        </div>
+                    </p-tabPanel>
+
+                    <!-- CREDITO INDIRECTO -->
+                    <p-tabPanel header="Crédito indirecto">
+                        <div class="grid pt-2 pb-0">
+                            <!-- Empresa -->
+                            <div class="field col-12 md:col-3 pb-0">
+                                <span class="p-float-label">
+                                    <p-dropdown
+                                        [options]="companies"
+                                        [class]="validateService.validate(formCreditLine.controls['indirect_company_id'])"
+                                        [autoDisplayFirst]="false"
+                                        [showClear]="true"
+                                        optionLabel="name"
+                                        optionValue="id"
+                                        formControlName="indirect_company_id"
+                                    ></p-dropdown>
+                                    <label>Empresa</label>
+                                </span>
+                                <error-message [formControlError]="formCreditLine.controls['indirect_company_id']"></error-message>
+                            </div>
+
+                             <!-- banco -->
+                             <div class="field col-12 md:col-3 pb-0">
+                                <span class="p-float-label">
+                                    <p-dropdown
+                                        [options]="bankList"
+                                        [class]="validateService.validate(formCreditLine.controls['indirect_financial_entity_id'])"
+                                        [autoDisplayFirst]="false"
+                                        [showClear]="true"
+                                        optionLabel="name"
+                                        optionValue="id"
+                                        formControlName="indirect_financial_entity_id"
+                                    ></p-dropdown>
+                                    <label>Banco</label>
+                                </span>
+                                <error-message [formControlError]="formCreditLine.controls['indirect_financial_entity_id']"></error-message>
+                            </div>
+
+                            <!-- Financiación -->
+                            <div class="field col-12 md:col-3 pb-0">
+                                <span class="p-float-label">
+                                    <p-dropdown
+                                        [options]="financingList"
+                                        [class]="validateService.validate(formCreditLine.controls['indirect_financing_type_id'])"
+                                        [autoDisplayFirst]="false"
+                                        optionLabel="name"
+                                        optionValue="id"
+                                        formControlName="indirect_financing_type_id"
+                                        [showClear]="true"
+                                    ></p-dropdown>
+                                    <label>Financiación</label>
+                                </span>
+                                <error-message [formControlError]="formCreditLine.controls['indirect_financing_type_id']"></error-message>
+                            </div>
+
+                            <!-- Moneda -->
+                            <div class="field col-12 md:col-3 pb-0">
+                                <span class="p-float-label">
+                                    <p-dropdown
+                                        [options]="currency"
+                                        [class]="validateService.validate(formCreditLine.controls['indirect_currency_type_id'])"
+                                        [autoDisplayFirst]="false"
+                                        optionLabel="name"
+                                        optionValue="id"
+                                        formControlName="indirect_currency_type_id"
+                                        [showClear]="true"
+                                    ></p-dropdown>
+                                    <label>Moneda</label>
+                                </span>
+                                <error-message [formControlError]="formCreditLine.controls['indirect_currency_type_id']"></error-message>
+                            </div>
+
+                            <!-- Linea Credito indirecta -->
+                            <div class="field col-12 md:col-3 py-0">
+                                <span class="p-float-label">
+                                    <input
+                                        [class]="validateService.validate(formCreditLine.controls['indirect_awarded_line_amount'])"
+                                        mode="decimal"
+                                        pInputText
+                                        [maxlength]="12"
+                                        formControlName="indirect_awarded_line_amount"
+                                        (keypress)="validateOnlyNumber($event)">
+                                    <label>Línea de Crédito Otorgada</label>
+                                </span>
+                                <error-message [maxLength] = "maxLengthAmountLineIndirect" [min]="amountLineMinValue" [formControlError]="formCreditLine.controls['indirect_awarded_line_amount']"></error-message>
+                            </div>
+
+                            <!-- Modalidad -->
+                            <div class="field col-12 md:col-3 py-0">
+                                <span class="p-float-label">
+                                    <p-dropdown
+                                        inputId="dropdown"
+                                        [autoDisplayFirst]="false"
+                                        [class]="validateService.validate(formCreditLine.controls['indirect_payment_modality_id'])"
+                                        optionLabel="description"
+                                        [showClear]="true"
+                                        [options]="modalities"
+                                        [autoDisplayFirst]="false"
+                                        [showClear]="true"
+                                        optionLabel="name"
+                                        appendTo="body"
+                                        optionValue="id"
+                                        formControlName="indirect_payment_modality_id"
+                                    ></p-dropdown>
+                                    <label>Modalidad de Pago</label>
+                                </span>
+                                <error-message [formControlError]="formCreditLine.controls['indirect_payment_modality_id']"></error-message>
+                            </div>
+
+                            <!-- TEA -->
+                            <div class="field col-12 md:col-3 py-0">
+                                <span class="p-float-label">
+                                    <p-inputNumber
+                                        class="col p-0"
+                                        formControlName="indirect_tea_percentage"
+                                        [class]="validateService.validate(formCreditLine.controls['indirect_tea_percentage'])"
+                                        mode="decimal"
+                                        currency="USD"
+                                        [maxlength]="6"
+                                        [min]="1"
+                                        locale="en-US"
+                                        [minFractionDigits]="2"
+                                        [maxFractionDigits]="3"
+                                    ></p-inputNumber>
+                                    <label>TEA  %</label>
+                                </span>
+                                <error-message [min]="overdraftPercentageMinValue" [max]="overdraftPercentageMaxValue" [formControlError]="formCreditLine.controls['indirect_tea_percentage']"></error-message>
+                            </div>
+
+                            <!-- OBSERVACION CREDITO INDIRECTO -->
+                            <div class="field col-12 md:col-12 py-0">
+                                <span class="p-float-label">
+                                    <textarea
+                                        class="w-full"
+                                        [class]="validateService.validate(formCreditLine.controls['indirect_observation'])"
+                                        formControlName="indirect_observation"
+                                        rows="2"
+                                        cols="30"
+                                        [maxlength]="500"
+                                        placeholder="Ingresa hasta 500 caracteres"
+                                        pInputTextarea [autoResize]="false"
+                                    ></textarea>
+                                    <label>Observación</label>
+                                </span>
+                                <error-message [min]="overdraftPercentageMinValue" [max]="overdraftPercentageMaxValue" [formControlError]="formCreditLine.controls['indirect_observation']"></error-message>
+                            </div>
+                        </div>
+                    </p-tabPanel>
+                </p-tabView>
+            </div>
+        </div>
+
+        <div class="col-12 text-center">
+            <button
+                pButton
+                class="b-primary 4 w-3 focus-visible-general"
+                label="Actualizar línea de crédito"
+                (click)="updateCreditLine()"
+            ></button>
+        </div>
+    </form>
+</div>

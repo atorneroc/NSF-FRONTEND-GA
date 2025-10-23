@@ -1,0 +1,215 @@
+<div class="grid justify-content-center">
+    <p-card [style]="{'width': '25rem', 'margin-bottom': '2em'}" class="col-12 md:col-12 w-full pb-0">
+        <ng-template pTemplate="header">
+			<div class="header-card w-full h-4rem flex">
+				<h2 class="col-6 md:col-6 align-self-center pl-4">Línea de Crédito</h2>
+				<div class="col-6 md:col-6 text-right align-self-center justify-content-end pr-4 flex flex-row">
+					<button
+						pButton
+						(click)="showModalRegisterCreditLine()"
+						class="col-3 b-primary px-5 py-2 mx-2 align-self-center focus-visible-general"
+						label="Crear línea de crédito"
+					></button>
+          <button
+          pButton
+          class="col-3 b-primary px-5 py-2 mx-2 align-self-center focus-visible-general"
+          label="Ver Reporte"
+          (click)="generateReportModal()"
+          ></button>
+				</div>
+			</div>
+		</ng-template>
+
+        <ng-template pTemplate="footer">
+            <form [formGroup]="formCreditLine">
+                <div class="grid col-12 md:col-12">
+                    <!-- Busqueda por Linea de credito-->
+                    <div class="grid col-12 md:col-8 p-fluid justify-content-center pb-5 pt-3 px-0">
+                        <span class="p-float-label p-input-icon-right w-full">
+                            <i class="pi pi-search pr-3"></i>
+                            <input
+                                class="search w-full"
+                                pInputText
+                                (keyup)="getClientByTerm()"
+                                [formControl]="filter">
+                            <label>¿Buscas una Línea de Crédito por cliente o Código Único?</label>
+                        </span>
+                    </div>
+
+                    <div class="grid col-12 md:col-8 p-fluid justify-content-center py-2 mb-2 px-0 card">
+                        <!-- Empresa -->
+                        <div class="custom-col-2">
+                            <span class="p-float-label">
+                                <p-dropdown
+                                    id="company_id"
+                                    [options]="companies"
+                                    [autoDisplayFirst]="false"
+                                    [showClear]="true"
+                                    optionLabel="name"
+                                    optionValue="id"
+                                    formControlName="company_id"
+                                    (onChange)="getAllCreditLine(0)"
+                                ></p-dropdown>
+                                <label>Empresa</label>
+                            </span>
+                        </div>
+
+                        <!-- Modalidad -->
+                        <div class="custom-col-2">
+                            <span class="p-float-label">
+                                <p-dropdown
+                                    id="modality_id"
+                                    [options]="modality_id"
+                                    [autoDisplayFirst]="false"
+                                    optionLabel="name"
+                                    optionValue="id"
+                                    formControlName="modality_id"
+                                    [showClear]="true"
+                                    (onChange)="getAllCreditLine(0)"
+                                ></p-dropdown>
+                                <label>Modalidad</label>
+                            </span>
+                        </div>
+
+                        <!-- Moneda -->
+                        <div class="custom-col-2">
+                            <span class="p-float-label">
+                                <p-dropdown
+                                    id="Id_Money"
+                                    [options]="currency"
+                                    [autoDisplayFirst]="false"
+                                    optionLabel="name"
+                                    optionValue="id"
+                                    formControlName="Id_Money"
+                                    [showClear]="true"
+                                    (onChange)="getAllCreditLine(0)"
+                                ></p-dropdown>
+                                <label>Tipo de Moneda</label>
+                            </span>
+                        </div>
+
+                        <!-- Estado -->
+                        <div class="custom-col-2">
+                            <span class="p-float-label">
+                                <p-dropdown
+                                    id="Id_State"
+                                    [options]="Id_State"
+                                    [autoDisplayFirst]="false"
+                                    optionLabel="name"
+                                    optionValue="id"
+                                    formControlName="Id_State"
+                                    [showClear]="true"
+                                    (onChange)="getAllCreditLine(0)"
+                                ></p-dropdown>
+                                <label>Estado de línea de crédito</label>
+                            </span>
+                        </div>
+                        <!-- LIMPIAR FILTROS -->
+                        <div class="custom-col-1 p-fluid justify-content-center align-items-center">
+                            <button
+                                pButton
+                                pRipple
+                                icon="pi pi-trash"
+                                class="p-button-rounded p-button-text text-color"
+                                pTooltip="Limpiar filtros"
+                                (click)="clearFilterCreditLine()"
+                            ></button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </ng-template>
+    </p-card>
+
+    <ng-container *ngIf="loaderService.opened">
+		<p-skeleton
+			class="col-12 md:col-12"
+			borderRadius="20px"
+			height="30rem"
+		></p-skeleton>
+	</ng-container>
+
+    <div *ngIf="!loaderService.opened" class="col-12 md:col-12 mt-0 pt-0">
+
+        <div class="col-12 pb-4 flex flex-row pt-0">
+			<h2 class="col-6 md:col-6 my-0 py-0 font-semibold text-800">Resultados</h2>
+			<h3 class="col-6 md:col-6 my-0 py-0 text-600 flex justify-content-end align-self-end font-medium">{{ mensaje }}</h3>
+		</div>
+
+        <p-table [value]="lCreditLine" class="mx-0 px-0" styleClass="p-datatable-m" [scrollable]="true" scrollHeight="370px" [tableStyle]="{'min-width': '30rem'}">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th class="text-center">N°</th>
+                    <th class="text-center">F. Inicio</th>
+                    <th class="text-center">Cliente</th>
+                    <th class="text-center">Empresa</th>
+                    <th class="text-center">Modalidad</th>
+                    <th class="text-center">Moneda</th>
+                    <th class="text-center">Línea de crédito</th>
+                    <th class="text-center">Consumo</th>
+                    <th class="text-center">Saldo</th>
+                    <th class="text-center">Estado</th>
+                    <th class="text-center">Opciones</th>
+                </tr>
+            </ng-template>
+
+            <ng-template pTemplate="body" let-creditLine>
+                <tr>
+                    <td class="text-center">{{creditLine.id_CreditLine}}</td>
+                    <td class="text-center">{{creditLine.start_Date | date:'dd/MM/YYYY'}}</td>
+                    <td>{{creditLine.client_Name | uppercase}}</td>
+                    <td class="text-center">
+                        <span [pTooltip]="creditLine.company_Name">{{ creditLine.company_Name === "SCHARFF LOGISTICA INTEGRADA S.A." ? "SLI" : "SICCSA" }}</span>
+                    </td>
+                    <td class="text-center">{{creditLine.modality | uppercase}}</td>
+                    <td class="text-center">{{creditLine.money | uppercase}}</td>
+                    <td class="text-right">{{creditLine.money === "Soles"? "S/" : "$"}} {{creditLine.amount_Line | number : "1.2-2" }}</td>
+                    <td class="text-right">{{creditLine.money === "Soles"? "S/" : "$"}} {{creditLine.amount_Consumption | number : "1.2-2" }}</td>
+                    <td class="text-right">{{creditLine.money === "Soles"? "S/" : "$"}} {{creditLine.amount_Balance | number : "1.2-2" }}</td>
+                    <td class="text-center">
+                        <div class="status-component" [class]="getStatusToCreditLine(creditLine.code_Status)">{{creditLine.status | uppercase}}</div>
+                    </td>
+
+                    <td class="text-center">
+						<button
+                            pButton
+                            class="p-button-text"
+                            (click)="menu.toggle($event); setCreditLine(creditLine)"
+                            icon="pi pi-ellipsis-v">
+                        </button>
+                        <p-menu
+                            #menu
+                            [model]="options"
+                            [popup]="true"
+                            appendTo="body">
+                        </p-menu>
+					</td>
+                </tr>
+
+            </ng-template>
+
+        </p-table>
+    </div>
+
+    <div class="col-12 md:col-6 align-items-center grid pt-0 mt-0">
+        <p-dropdown
+                [options]="pageSizeOptions"
+                (onChange)="onPageSizeChange($event.value);
+                getAllCreditLine(0)">
+        </p-dropdown>
+        <div class="pl-4">
+            <span>
+                Mostrando el intervalo {{pageSize * pageNumber + 1}} - {{(pageSize * (pageNumber + 1)) > totalRows ? totalRows : (pageSize * (pageNumber + 1))}} de {{totalRows}} resultados.
+            </span>
+        </div>
+    </div>
+
+    <div class="col-12 md:col-6 pt-0 mt-0">
+        <p-paginator
+            [rows]="pageSize"
+            [totalRecords]="totalRows"
+            (onPageChange)="getAllCreditLine($event.page)"
+        ></p-paginator>
+    </div>
+
+</div>

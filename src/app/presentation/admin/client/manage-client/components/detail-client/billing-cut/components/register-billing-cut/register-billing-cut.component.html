@@ -1,0 +1,152 @@
+<div class="px-5">
+    <form [formGroup]="formBillingCut">
+
+        <div>
+            <h3>Información de Facturación</h3>
+        </div>
+
+        <!-- Inputs Datos Contacto -->
+        <div class="p-fluid grid">
+            <!-- Empresa -->
+            <div class="field col-12 md:col-4 py-0" style="margin-bottom: 24px;padding-right: 16px;">
+                <span class="p-float-label">
+                    <p-dropdown
+                        [options]="companies"
+                        [class]="validateService.validate(formBillingCut.controls['id_Company'])"
+                        [autoDisplayFirst]="false"
+                        [showClear]="true"
+                        optionLabel="name"
+                        optionValue="id"
+                        formControlName="id_Company"
+                        (onChange)="onChangeCompany($event.value)"
+                        (onClear)="onClearCompany($event.value)"
+                    ></p-dropdown>
+                    <label>Empresa</label>
+                </span>
+                <error-message [formControlError]="formBillingCut.controls['id_Company']"></error-message>
+            </div>
+            <ng-container *ngIf="cut_detail && cut_detail.controls">
+                <div class="col-12 p-fluid grid" *ngFor="let cut of cut_detail.controls; let cutIndex = index">
+                    <div [formGroup]="getDetailCourtForm(cut)" class="w-full flex">
+                     <!-- Unidad -->
+                     <div class="field col-12 md:col-4 py-0">
+                        <span class="p-float-label">
+                            <p-dropdown
+                                id="id_business_unit"
+                                [options]="businessUnits"
+                                [class]="validateService.validate(getDetailCourtForm(cut).get('id_business_unit'))"
+                                [autoDisplayFirst]="false"
+                                [showClear]="true"
+                                optionLabel="descripcion_Unidad_Negocio"
+                                optionValue="id_Unidad_Negocio"
+                                formControlName="id_business_unit"
+                                (onChange)="onChangeBusinessUnit($event.value, cutIndex)"
+                                (onClear)="onClearBusinessUnit(cutIndex)"
+                                appendTo="body"
+                            ></p-dropdown>
+                            <label>Unidad</label>
+                            <error-message [formControlError]="getDetailCourtForm(cut).get('id_business_unit')"></error-message>
+                        </span>
+                      </div>        
+       
+                     <!-- producto -->
+                     <div class="field col-12 md:col-4 py-0">
+                        <span class="p-float-label">
+                            <p-dropdown
+                                inputId="dropdown"
+                                [autoDisplayFirst]="false"
+                                optionLabel="description"
+                                [showClear]="true"
+                                id="id_product"
+                                [options]="getDetailCourtForm(cut).get('productsList').value"
+                                [class]="validateService.validate(getDetailCourtForm(cut).get('id_product'))"
+                                [autoDisplayFirst]="false"
+                                [showClear]="true"
+                                optionLabel="descripcion_Producto"
+                                appendTo="body"
+                                optionValue="id_Producto"
+                                formControlName="id_product"
+                                (onChange)="onProductChange($event, getDetailCourtForm(cut))"
+                            ></p-dropdown>
+                            <label for="dropdown">Producto</label>
+                            <error-message [formControlError]="getDetailCourtForm(cut).get('id_product')"></error-message>
+                        </span>
+                    </div>
+      
+       
+                     <!-- Corte -->
+                     <div class="field col-12 md:col-3 py-0">
+                        <span class="p-float-label">
+                            <p-dropdown
+                                id="id_court"
+                                [options]="courts"
+                                [class]="validateService.validate(getDetailCourtForm(cut).get('id_court'))"
+                                [autoDisplayFirst]="false"
+                                optionLabel="name"
+                                optionValue="id"
+                                formControlName="id_court"
+                                [showClear]="true"
+                                appendTo="body"
+                                (onChange)="onCutBillingChange(getDetailCourtForm(cut))"
+                            ></p-dropdown>
+                            <label for="dropdown">Corte de facturación</label>
+                            <error-message [formControlError]="getDetailCourtForm(cut).get('id_court')"></error-message>
+                        </span>
+                    </div>
+
+                     <!-- Botón -->
+                        <div *ngIf="cut_detail && cut_detail.controls" 
+                            class="col-12 md:col-1 flex align-items-center" 
+                            style="margin-top: -10px;">
+                            <!-- Botón de editar -->
+                            <button *ngIf="optionModule"
+                                #Activar
+                                [disabled]="cut_detail.at(cutIndex).get('status')?.value === true"
+                                (click)="activateDetail(cutIndex)"
+                                type="button"
+                                class="p-button p-button-text p-button-rounded p-0 tacho-button"
+                                pTooltip="Activar"
+                                tooltipPosition="top"
+                                style="color: black; transition: none;width: 40px!important;">
+                                <i class="pi pi-pencil" style="font-size: 1.2rem; color: black;"></i>
+                            </button>
+
+                            <!-- Botón de eliminar -->
+                            <button
+                                #Remove
+                                [disabled]="cut_detail.at(cutIndex).get('status')?.value === false"
+                                (click)="removeDetail(cutIndex)"
+                                type="button"
+                                class="p-button p-button-text p-button-rounded p-0 tacho-button"
+                                pTooltip="Limpiar filtros"
+                                tooltipPosition="top"
+                                style="color: black; transition: none; margin-left: 4px;width: 40px!important;">
+                                <i class="pi pi-trash" style="font-size: 1.2rem; color: black;"></i>
+                            </button>
+
+                        </div>
+                   </div>
+               </div>
+            </ng-container>
+           
+            <!-- Botón Agregar Ítem -->
+            <div class="text-left px-3">
+                <button
+                  pButton
+                  class="b-primary focus-visible-general buttton-notas"
+                  label="Agregar Ítem"
+                  type="button"
+                  (click)="registerDetail()">
+                  <span class="iconagregar font-bold">+</span>
+                </button>
+            </div>
+
+        </div>
+
+        <div class="col-12 text-center py-3 focus">
+            <button pButton class="b-primary 4 w-3" label="Guardar" type="button" (click)="registerBillingCut()">
+            </button>
+        </div>
+
+    </form>
+</div>

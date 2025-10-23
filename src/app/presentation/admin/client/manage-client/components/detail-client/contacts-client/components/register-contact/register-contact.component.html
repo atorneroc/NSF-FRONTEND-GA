@@ -1,0 +1,145 @@
+<div class="px-5">
+    <form [formGroup]="formContact">
+
+        <div>
+            <h3>Contacto N° {{ idContact }}</h3>
+        </div>
+
+        <!-- Inputs Datos Contacto -->
+        <div class="p-fluid grid">
+
+            <!-- Tipo de contacto -->
+            <div class="field col-12 md:col-4">
+                <span class="p-float-label">
+                    <p-dropdown
+                        [class]="validate('typeContact')"
+                        [options]="typeContact"
+                        [autoDisplayFirst]="false"
+                        optionLabel="description"
+                        formControlName="typeContact"
+                        (onChange)="getTypContact($event)"
+                        [showClear]="true"></p-dropdown>
+                    <label>Tipo de contacto</label>
+                </span>
+                <error-message [formControlError]="formContact.controls['typeContact']"></error-message>
+            </div>
+
+            <!-- Area de contacto -->
+            <div class="field col-12 md:col-4">
+                <span class="p-float-label">
+                    <p-dropdown 
+                        [class]="validate('areaContact')" 
+                        [options]="areaContact" 
+                        inputId="dropdown"
+                        [autoDisplayFirst]="false"
+                        optionLabel="description"
+                        formControlName="areaContact"
+                        [showClear]="true"
+                    ></p-dropdown>
+                    <label for="dropdown">Área de contacto</label>
+                </span>
+                <error-message [formControlError]="formContact.controls['areaContact']"></error-message>
+            </div>
+
+            <!-- Nombre completo -->
+            <div class="field col-12 md:col-4">
+                <span class="p-float-label">
+                    <input id="float-input" [class]="validate('full_Name')" pInputText formControlName="full_Name">
+                    <label for="float-input">Nombre Completo</label>
+                </span>
+                <error-message [formControlError]="formContact.controls['full_Name']"></error-message>
+            </div>
+
+            <!-- Telefono 1 -->
+            <ng-container>
+                <div class="field col-5">
+                    <span class="p-float-label">
+                        <input
+                            [class]="validateService.validate(formContact.controls['phone1'])"
+                            id="float-input"
+                            pInputText
+                            formControlName="phone1">
+                        <label for="float-input">Telefono 1</label>
+                    </span>
+                    <error-message [maxLength]="this.maxLengthPhone1" [minLength]="this.minLengthPhone" [formControlError]="formContact.controls['phone1']"></error-message>
+                </div>
+
+                <div class="field col-1">
+                    <button pButton pRipple icon="pi pi-plus" class="p-button-rounded p-button-outlined"
+                    (click)="addPhone()"></button>
+                </div>
+            </ng-container>
+
+            <!-- Correo 1 -->
+            <ng-container>
+                <div class="field col-5">
+                    <span class="p-float-label">
+                        <input [class]="validate('email1')" id="float-input" pInputText formControlName="email1">
+                        <label for="float-input">Correo 1</label>
+                    </span>
+                    <error-message [formControlError]="formContact.controls['email1']"></error-message>
+                </div>
+
+                <div class="field col-1">
+                    <button pButton pRipple icon="pi pi-plus" class="p-button-rounded p-button-outlined"
+                    (click)="addEmail()"></button>
+                </div>
+            </ng-container>
+
+            <!-- Telefono 2 -->
+            <ng-container *ngIf="displayPhone">
+                <div class="field col-5">
+                    <span class="p-float-label">
+                        <input
+                            [class]="validateService.validate(formContact.controls['phone2'])"
+                            id="float-input"
+                            pInputText
+                            formControlName="phone2">
+                        <label for="float-input">Telefono 2</label>
+                    </span>
+                    <error-message
+                        [maxLength]="this.maxLengthPhone1"
+                        [minLength]="this.minLengthPhone"
+                        [formControlError]="formContact.controls['phone2']">
+                    </error-message>
+                </div>
+
+                <div class="field col-1">
+                    <button pButton pRipple icon="pi pi-minus" class="p-button-rounded p-button-outlined"
+                    (click)="addPhone()"></button>
+                </div>
+            </ng-container>
+
+            <!-- Correo 2 -->
+            <ng-container *ngIf="displayEmail">
+                <div class="field col-5">
+                    <span class="p-float-label">
+                        <input id="float-input" pInputText formControlName="email2">
+                        <label for="float-input">Correo 2</label>
+                    </span>
+                    <error-message [formControlError]="formContact.controls['email2']"></error-message>
+                </div>
+
+                <div class="field col-1">
+                    <button pButton pRipple icon="pi pi-minus" class="p-button-rounded p-button-outlined"
+                    (click)="addEmail()"></button>
+                </div>
+            </ng-container>
+
+            <!-- Comentarios -->
+            <div class="field col-12 md:col-12">
+                <span class="p-float-label">
+                    <textarea id="float-input" rows="4" cols="30" pInputTextarea formControlName="comments"></textarea>
+                    <label for="float-input">Comentarios</label>
+                </span>
+            </div>
+
+        </div>
+
+        <div class="col-12 text-center py-3 focus">
+            <button pButton class="b-primary 4 w-3" label="Crear contacto" (click)="registerContact()">
+            </button>
+        </div>
+
+    </form>
+</div>

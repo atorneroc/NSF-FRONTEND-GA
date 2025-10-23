@@ -1,0 +1,170 @@
+<div class="col-12 px-5">
+
+    <div class="pb-3">
+    </div>
+
+    <form [formGroup]="formService">
+
+        <div class="p-fluid grid">
+            <!-- Producto -->
+            <div class="field col-12 md:col-4">
+                <span class="p-float-label">
+                    <p-dropdown 
+                        [class]="validateService.validate(formService.controls['store'])" 
+                        [options]="storeList"
+                        [autoDisplayFirst]="false"
+                        optionValue="id"
+                        optionLabel="name"
+                        formControlName="store" 
+                        [showClear]="true" 
+                        [filter]="true" 
+                        (onChange)="onChangeStore()"
+                        appendTo="body">
+                    </p-dropdown>
+                    <label>Producto</label>
+                </span>
+                <error-message [formControlError]="formService.controls['store']"></error-message>
+            </div>
+
+            <!-- Servicio -->
+            <div class="field col-12 md:col-4">
+                <span class="p-float-label">
+                    <p-dropdown 
+                        [class]="validateService.validate(formService.controls['accounting_service'])"
+                        [options]="lAccountingService"
+                        [autoDisplayFirst]="false"
+                        optionValue="id"
+                        optionLabel="description"
+                        formControlName="accounting_service"
+                        [showClear]="true"
+                        [filter]="true" 
+                        (onChange)="onChangeService()"
+                        appendTo="body">
+                    </p-dropdown>
+                    <label>Servicio Contable</label>
+                </span>
+                <error-message [formControlError]="formService.controls['accounting_service']"></error-message>
+            </div>
+
+            <!-- Agrupador -->
+            <div class="field col-12 md:col-4">
+                <span class="p-float-label">
+                    <p-dropdown 
+                        [class]="validateService.validate(formService.controls['grouper'])"
+                        [options]="lGrouperOperationalDetail"  
+                        [autoDisplayFirst]="false"
+                        optionValue="id"
+                        optionLabel="description"
+                        formControlName="grouper"
+                        [showClear]="true"
+                        [filter]="true" 
+                        appendTo="body">
+                    </p-dropdown>
+                    <label>Agrupador</label>
+                </span>
+            </div>
+
+            <!-- Detalle Operativo -->
+            <div class="field col-12 md:col-4">
+                <span class="p-float-label">
+                    <p-dropdown
+                        [class]="validateService.validate(formService.controls['operational_detail'])"
+                        [options]="lOperationDetail"
+                        [autoDisplayFirst]="false"
+                        optionValue="id"
+                        optionLabel="description"
+                        formControlName="operational_detail"
+                        [showClear]="true"
+                        [filter]="true"
+                        (onChange)="onChangeDetail()"
+                        appendTo="body">
+                    </p-dropdown>
+                    <label>Detalle Operativo</label>
+                </span>
+                <error-message [formControlError]="formService.controls['operational_detail']"></error-message>
+            </div>
+
+            <!-- Unidad -->
+            <div class="field col-12 md:col-4">
+                <span class="p-float-label">
+                    <p-dropdown
+                        [class]="validateService.validate(formService.controls['unit_measure'])"
+                        [options]="lUnitMeasure"
+                        [autoDisplayFirst]="false"
+                        optionValue="id" 
+                        optionLabel="description"
+                        formControlName="unit_measure"
+                        [showClear]="true" 
+                        [filter]="true"
+                        appendTo="body">
+                    </p-dropdown>
+                    <label>Unidad</label>
+                </span>
+                <error-message [formControlError]="formService.controls['unit_measure']"></error-message>
+            </div>
+
+            <!-- Tarifa -->
+            <div class="field col-12 md:col-4">
+                <span class="p-float-label">
+                    <p-inputNumber
+                        [class]="validateService.validate(formService.controls['tariff'])"
+                        formControlName="tariff"
+                        mode="currency"
+                        [min]="0"
+                        currency="{{isDollarSelected? 'USD' : 'PEN'}}"
+                        locale="{{isDollarSelected? 'en-US' : 'es-PE'}}"
+                        [minFractionDigits]="2"
+                        [maxFractionDigits]="3"
+                        (onInput)="calculateSubtotalPriceForTarif($event.value)">
+                    </p-inputNumber>
+                    <label>Tarifa</label>
+                </span>
+                <error-message [formControlError]="formService.controls['tariff']"></error-message>
+            </div>
+
+            <!-- Consumo -->
+            <div class="field col-12 md:col-4 py-3">
+                <span class="p-float-label">
+                    <p-inputNumber 
+                        [class]="validateService.validate(formService.controls['quantity'])"
+                        class=" align-self-start"
+                        formControlName="quantity"
+                        [minFractionDigits]="2"
+                        [maxFractionDigits]="3"
+                        locale="es-PE"
+                        [min]="1"
+                        (onInput)="calculateSubtotalPrice($event)"
+                    ></p-inputNumber>
+                    <label>Cantidad</label>
+                </span>
+                <error-message
+                     [min]="1"
+                     [formControlError]="formService.controls['quantity']"></error-message>
+            </div>
+
+            <!-- Subtotal -->
+            <div class="field col-12 md:col-4 py-3">
+                <span class="p-float-label">
+                    <p-inputNumber 
+                        [class]="validateService.validate(formService.controls['subtotal_price'])"
+                        formControlName="subtotal_price"
+                        mode="currency"
+                        currency="{{isDollarSelected? 'USD' : 'PEN'}}"
+                        locale="{{isDollarSelected? 'en-US' : 'es-PE'}}"
+                        [minFractionDigits]="2" 
+                        [maxFractionDigits]="2"
+                        [readonly]="true">
+                    </p-inputNumber>
+                    <label>Subtotal</label>
+                </span>
+            </div>
+
+        </div>
+
+    </form>
+
+    <div class="col-12 text-center py-3">
+        <button pButton class="b-primary px-5 py-2 focus-visible-button focus-visible-general" label="Crear servicio" (click)="registerService()">
+        </button>
+    </div>
+</div>

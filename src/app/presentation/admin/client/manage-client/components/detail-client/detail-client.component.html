@@ -1,0 +1,75 @@
+<ng-container *ngIf="client">
+    <div class="grid">
+
+        <!-- <div class="col-12 md:col-6 flex align-items-center">
+            <div>
+                <button pButton pRipple icon="pi pi-arrow-left" class="p-button-rounded p-button-text text-color"
+                    (click)="manageClient()"></button>
+            </div>
+
+            <div class="px-3">
+                <h3 class="text-xl text-700">
+                    Cliente >  {{client.business_Name}}
+                </h3>
+            </div>
+
+            <div [class]="client.status ? 'point-active' : 'point-inactive'"
+                [pTooltip]="client.status ? 'Cliente Habilitado' : 'Cliente Inhabilitado'">
+            </div>
+        </div> -->
+
+    </div>
+
+    <div class="py-4">
+        <p-card>
+            <ng-template pTemplate="header">
+                <div class="header-card w-full h-4rem flex">
+                    <h2 class="col-6 md:col-6 align-self-center pl-4">Detalle Cliente</h2>
+                    <div class="col-12 md:col-6 flex  flex-row align-items-center justify-content-end ">
+                        <!-- SUNAT -->
+                        <div class="surface-overlay text-center px-3 py-2 border-round-xl flex flex-row mr-2">
+                            <i class="pi pi-ban text-red-500 rotate-90"></i>
+                            <img src="../../../../../../../assets/img/SUNAT.png" class="img-icon pl-2"
+                                alt="Imagen referencial SUNAT" pTooltip="SUNAT">
+                        </div>
+
+                        <!-- SAP -->
+                        <div class="surface-overlay text-center px-2 py-2 border-round-xl flex flex-row align-items-center">
+                            <i [attr.class]="StatusSap[client.id_Sap_Status]?.classCss" [pTooltip]="StatusSap[client.id_Sap_Status]?.tooltip"></i>
+
+                            <img src="../../../../../../../assets/img/SAP.png" class="img-icon pl-2" alt="Imagen referencial SAP">
+                        </div>
+                    </div>
+                </div>
+            </ng-template>
+
+            <p-tabView class="tab-secondary">
+
+                <p-tabPanel header="Información" leftIcon="pi pi-info-circle" class="mr-8">
+                    <app-information-client></app-information-client>
+                </p-tabPanel>
+
+                <p-tabPanel header="Línea de crédito" leftIcon="pi pi-credit-card">
+                    <app-credit-line></app-credit-line>
+                </p-tabPanel>
+
+                <p-tabPanel header="Contactos" leftIcon="pi pi-book">
+                    <app-contacts-client></app-contacts-client>
+                </p-tabPanel>
+
+                <p-tabPanel header="Direcciones" leftIcon="pi pi-map-marker">
+                    <app-address-client></app-address-client>
+                </p-tabPanel>
+
+                <p-tabPanel header="Datos de Facturación" leftIcon="pi pi-book">
+                    <app-billing-cut></app-billing-cut>
+                </p-tabPanel>
+
+            </p-tabView>
+        </p-card>
+    </div>
+</ng-container>
+
+<ng-container *ngIf="!client">
+    <skeleton-detail-information></skeleton-detail-information>
+</ng-container>

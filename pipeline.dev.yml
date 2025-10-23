@@ -1,0 +1,62 @@
+# Node.js with Angular
+# Build a Node.js project that uses Angular.
+# Add steps that analyze code, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
+
+trigger:
+- develop
+
+stages:
+  - stage: Build
+    displayName: 'Building'
+    jobs:
+      - job: BuildWebApp
+        variables:
+          buildConfiguration: 'Release'
+        pool:
+          vmImage: ubuntu-latest
+        steps:
+        - task: NodeTool@0
+          inputs:
+            versionSpec: '20.x'
+          displayName: 'Install Node.js'
+
+        - script: |
+            npm install -g @angular/cli
+            npm install
+            ng build --configuration development
+          displayName: 'npm install and build'
+
+        - task: ArchiveFiles@2
+          inputs:
+             rootFolderOrFile: '$(System.DefaultWorkingDirectory)/dist/scharff.frontend.facturacion'
+             includeRootFolder: false
+             archiveType: 'zip'
+             archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+             replaceExistingArchive: true
+
+        - task: PublishBuildArtifacts@1
+          inputs:
+            PathtoPublish: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+            ArtifactName: 'drop'
+            publishLocation: 'Container'
+
+  - stage: DeployWebApp
+    displayName: 'Deploying'
+    jobs:
+      - deployment: 
+        pool:
+          vmImage: ubuntu-latest
+        environment: 'Develop'
+        strategy: 
+          runOnce:
+            deploy:
+              steps:
+                - task: AzureWebApp@1
+                  inputs:
+                    azureSubscription: 'nfs-serviceconnection'
+                    appType: 'webAppLinux'
+                    appName: 'nsf-frontend-dev'
+                    package: '$(Pipeline.Workspace)/drop/$(Build.BuildId).zip'
+                    runtimeStack: 'NODE|20-lts'
+                    startUpCommand: 'pm2 serve /home/site/wwwroot --spa --no-daemon'

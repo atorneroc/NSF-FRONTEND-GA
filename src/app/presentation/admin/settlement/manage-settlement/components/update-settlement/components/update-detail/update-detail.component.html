@@ -1,0 +1,73 @@
+<div class="px-5">
+    <form>
+      <div class="pb-4">
+        <hr>
+      </div>
+  
+      <div class="p-fluid grid">
+  
+        <div class="field col-12 md:col-4">
+          <span class="p-float-label">
+            <p-dropdown 
+                [autoDisplayFirst]="false"
+                optionLabel="description" 
+                [showClear]="true"></p-dropdown>
+            <label>Detalle operativo</label>
+          </span>
+        </div>
+  
+        <!-- Area de contacto -->
+        <div class="field col-12 md:col-4">
+          <span class="p-float-label">
+            <p-dropdown 
+                inputId="dropdown"
+                [autoDisplayFirst]="false" 
+                optionLabel="description"
+                [showClear]="true"></p-dropdown>
+            <label for="dropdown">Unidad</label>
+          </span>
+        </div>
+
+        <div class="field col-12 md:col-4">
+            <span class="p-float-label">
+              <p-dropdown 
+                  inputId="dropdown"
+                  [autoDisplayFirst]="false" 
+                  optionLabel="description"
+                  [showClear]="true"></p-dropdown>
+              <label for="dropdown">Moneda</label>
+            </span>
+        </div>
+
+        <div class="field col-12 md:col-4">
+            <span class="p-float-label">
+              <p-dropdown 
+                  inputId="dropdown"
+                  [autoDisplayFirst]="false" 
+                  optionLabel="description"
+                  [showClear]="true"></p-dropdown>
+              <label for="dropdown">Tarifa</label>
+            </span>
+        </div>
+
+        <div class="field col-12 md:col-4">
+            <span class="p-float-label">
+              <p-dropdown 
+                  inputId="dropdown"
+                  [autoDisplayFirst]="false" 
+                  optionLabel="description"
+                  [showClear]="true"></p-dropdown>
+              <label for="dropdown">Consumo</label>
+            </span>
+        </div>
+  
+  
+      </div>
+  
+      <div class="col-12 text-center py-3 focus">
+        <button pButton class="b-primary 4 w-3" label="Actualizar detalle" (click)="true">
+        </button>
+      </div>
+  
+    </form>
+  </div>

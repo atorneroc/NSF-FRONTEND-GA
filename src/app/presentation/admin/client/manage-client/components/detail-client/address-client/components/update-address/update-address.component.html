@@ -1,0 +1,133 @@
+<div class="px-5">
+    <form [formGroup]="formDirection">
+        <div>
+            <h3>Dirección relacionada</h3>
+        </div>
+
+        <div class="p-fluid grid">
+            <!-- Tipo de direccion -->
+            <div class="field col-12 md:col-6">
+                <span class="p-float-label">
+                    <p-dropdown
+                        [class]="validateService.validate(formDirection.controls['parameter_Type'])"
+                        [options]="lTypeDirection"
+                        [autoDisplayFirst]="false"
+                        optionValue="id"
+                        optionLabel="description"
+                        formControlName="parameter_Type"
+                        (onChange)="getTypeAddressInput($event.value)"
+                        [showClear]="true"
+                    ></p-dropdown>
+                    <label>Tipo de dirección</label>
+                </span>
+                <error-message [formControlError]="formDirection.controls['parameter_Type']"></error-message>
+            </div>
+
+            <!-- Unidad -->
+            <div *ngIf="isTypeFiscalAddress === false" class="field col-12 md:col-6">
+                <span class="p-float-label">
+                    <p-dropdown
+                        [class]="validateService.validate(formDirection.controls['id_Unit'])"
+                        [options]="unit"
+                        [autoDisplayFirst]="false"
+                        optionLabel="description"
+                        formControlName="id_Unit"
+                        [showClear]="true"
+                        optionValue="id"
+                    ></p-dropdown>
+                    <label>Unidad</label>
+                </span>
+                <error-message  [formControlError]="formDirection.controls['id_Unit']" ></error-message>
+            </div>
+
+            <!-- Código Postal -->
+            <div *ngIf="isTypeFiscalAddress === true" class="field col-12 md:col-6">
+                <span class="p-float-label">
+                    <input
+                        id="float-input"
+                        [class]="validateService.validate(formDirection.controls['postal_Code'])"
+                        pInputText
+                        formControlName="postal_Code" />
+                    <label for="float-input">Codigo Postal</label>
+                </span>
+                <error-message [maxLength] = "maxLengthfield" [formControlError]="formDirection.controls['postal_Code']" ></error-message>
+            </div>
+
+            <!-- Ubicación -->
+            <div *ngIf="isTypeFiscalAddress === true" class="field col-12 md:col-8">
+                <span class="p-float-label">
+                    <p-dropdown
+                        [class]="validateService.validate(formDirection.controls['id_Ubigeo'])"
+                        [options]="lLocations"
+                        [autoDisplayFirst]="false"
+                        [showClear]="true"
+                        [filter]="true"
+                        optionValue="id"
+                        optionLabel="description"
+                        formControlName="id_Ubigeo"
+                        (onChange)="getPostalCodeAndUbigeoByUbication($event.value)"
+                    ></p-dropdown>
+                    <label>Ubicación</label>
+                </span>
+                <error-message [formControlError]="formDirection.controls['id_Ubigeo']"></error-message>
+            </div>
+
+            <!-- Ubigeo -->
+            <div *ngIf="isTypeFiscalAddress === true" class="field col-12 md:col-4">
+                <span class="p-float-label">
+                    <input
+                        [class]="validateService.validate(formDirection.controls['ubigeo'])"
+                        id="float-input"
+                        pInputText
+                        formControlName="ubigeo"
+                        [class.p-disabled]="true"
+                    />
+                    <label for="float-input">Ubigeo</label>
+                </span>
+            </div>
+
+            <!-- Dirección -->
+            <div class="field col-12 md:col-8">
+                <span class="p-float-label">
+                    <input
+                        [class]="validateService.validate(formDirection.controls['address'])"
+                        id="float-input"
+                        pInputText
+                        formControlName="address" />
+                    <label for="float-input">Dirección</label>
+                </span>
+                <error-message
+                [minLength]="this.minLengthAddress"
+                [maxLength]="this.maxLengthAddress"
+                [formControlError]="formDirection.controls['address']"></error-message>
+            </div>
+
+            <!-- Estado -->
+            <div class="field col-12 md:col-4">
+                <span class="p-float-label">
+                    <p-dropdown
+                        [class]="validateService.validate(formDirection.controls['status'])"
+                        [options]="status"
+                        [autoDisplayFirst]="false"
+                        optionValue="id"
+                        optionLabel="description"
+                        formControlName="status"
+                        [disabled]="true"
+                        [showClear]="true"
+                    ></p-dropdown>
+                    <label>Estado</label>
+                </span>
+                <error-message [formControlError]="formDirection.controls['status']"></error-message>
+            </div>
+        </div>
+        
+        <div class="col-12 text-center py-3 focus">
+			<button
+				pButton
+				class="b-primary 4 w-3"
+				label="Actualizar dirección"
+				(click)="updateDirection()"
+			></button>
+		</div>
+    </form>
+</div>

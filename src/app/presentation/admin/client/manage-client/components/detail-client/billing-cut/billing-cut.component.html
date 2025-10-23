@@ -1,0 +1,79 @@
+<div class="grid md:px-8 md:py-2">
+    <div class="col-12 pb-0">
+        <h1 class="text-2xl">
+            Corte de Facturación
+            <p-divider></p-divider>
+        </h1>
+    </div>
+
+    <div class="col-12 flex flex-column">
+        <ng-container *ngFor="let billingCut of lBillingCuts; let index = index" class="w-full">
+            <div class="grid col-12 pt-0">
+                <div class="col-12 md:col-12 pt-0">
+                    <span class="font-semibold">Empresa:</span>
+                    <div class="pt-2">{{billingCut.company}}</div>
+                </div>
+
+                <div class="col-12 grid pt-3 pb-0">
+                    <div class="col-12 md:col-3 pt-2 pb-0">
+                        <span class="font-semibold">Unidad de negocio:</span>
+                    </div>
+                
+                    <div class="col-12 md:col-3 pt-2 pb-0">
+                        <span class="font-semibold">Producto:</span>
+                    </div>
+                
+                    <div class="col-12 md:col-3 pt-2 pb-0">
+                        <span class="font-semibold">Corte de facturación:</span>
+                    </div>
+                
+                    <div class="col-12 md:col-1 pt-2 pb-0">
+                        <span class="font-semibold">Estado:</span>
+                    </div>
+
+                    <!-- (click)="showModalUpdateContact(contact)" -->
+                    <!-- (click)="deleteContactById(contact.id, contact.id)" -->
+                    <div  class="col-12 md:col-2 text-base text-right pt-0">
+                        <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-text text-base pt-0"
+                            pTooltip="Editar corte" tooltipPosition="top" placeholder="Top"
+                            (click)="showModalBillingCut(true, billingCut.id_Company)"
+                            ></button>
+                        <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-text text-base pt-0"
+                            pTooltip="Dar de baja corte" tooltipPosition="top" placeholder="Top"
+                             (click)="cancelProfile(billingCut.id_Company)"
+                           ></button>
+                    </div>
+                </div>
+
+                <div class="col-12 grid pt-0 pb-0">
+                    <ng-container *ngFor="let cut of billingCut.billignCuts">
+                        <div class="col-12 md:col-3 pt-0">
+                            <div class="pt-0">{{cut.businessUnit}}</div>
+                        </div>
+                
+                        <div class="col-12 md:col-3 pt-0">
+                            <div class="pt-0">{{ cut.product || 'Todos' }}</div>
+                        </div>
+                
+                        <div class="col-12 md:col-3 pt-0">
+                            <div class="pt-0">{{cut.billingCut_Type}}</div>
+                        </div>
+                
+                        <div class="col-12 md:col-3 pt-0">
+                            <div class="pt-0">{{cut.status === true ? 'Activo' : 'Inactivo'}}</div>
+                        </div>
+                    </ng-container>
+                
+                </div>
+                <p-divider class="col-12 pt-0 pb-0"></p-divider>
+            </div>         
+        </ng-container>
+    </div>
+
+    <div class="col-12 text-center pt-0">
+        <button [disabled]="!client?.status" pButton class="b-primary px-5" (click)="showModalBillingCut(false, 0)"
+            label="Agregar corte">
+        </button>
+    </div>
+
+</div>

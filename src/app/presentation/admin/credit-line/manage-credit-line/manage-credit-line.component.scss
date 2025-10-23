@@ -1,0 +1,10 @@
+:host ::ng-deep { 
+    .p-inputswitch.p-inputswitch-checked .p-inputswitch-slider {
+        background: #0EA70E !important;
+    }
+
+    .p-dialog-header {
+        white-space: pre-wrap; /* Esto preserva los espacios y saltos de línea */
+    }
+}
+

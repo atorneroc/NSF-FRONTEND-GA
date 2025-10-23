@@ -1,0 +1,386 @@
+<div class="grid justify-content-center p-fluid mt-6">
+
+    <ng-container *ngIf="loaderService.opened">
+        <p-skeleton class="col-12 md:col-12" borderRadius="20px" height="40rem"></p-skeleton>
+    </ng-container>
+
+    <div [hidden]="loaderService.opened" [style]="{'width': '25rem', 'margin-bottom': '2em','border': '2px solid #000000 !important','background': 'white','border-radius': '1rem'}" class="col-12 md:col-12 w-full">
+      <div class="grid col-12 md:col-12 justify-content-center" style="margin: 0px;padding: 0px;">
+          <form [formGroup]="formBodySettlement" class="justify-content-center grid col-12">
+
+              <div class="col-12 pb-2 grid pt-4 px-5 " [style]="{'align-items': 'center'}">
+                <h2 class="col-12 md:col-2 my-0 py-0 font-semibold text-800">Resultados</h2>
+                <h3 class="col-12 md:col-2 my-0 py-0 text-600 font-medium">
+                  <span class="font-semibold text-lg"><i class="pi pi-check-circle point-active text-3xl" [style]="{'margin-right': '1rem'}"></i>{{mensaje}}</span>
+                </h3>
+                <div *ngIf="rates_detail.controls.length > 0" class="col-12 md:col-4 my-0 text-center grid">
+
+                    <!-- Soles -->
+                    <div class="col-6 md:col-6 justify-content-end flex pr-4">
+                        <p-radioButton
+                            value="1"
+                            name="type_currency_selected"
+                            formControlName="type_currency_selected"
+                            [disabled]="true"></p-radioButton>
+                        <label class="ml-2" for="currencyType_1">Soles</label>
+                    </div>
+
+                    <!-- Dolares -->
+                    <div class="col-6 md:col-6 justify-content-start flex pl-4">
+                        <p-radioButton
+                            value="2"
+                            name="type_currency_selected"
+                            formControlName="type_currency_selected"
+                            [disabled]="true"></p-radioButton>
+                        <label class="ml-2" for="currencyType_2">Dólares  (TC: {{bank_purchase| number: '1.3-3'}})</label>
+                    </div>
+
+                </div>
+                <!-- Fecha de inicio de servicio -->
+                <div class="col-12 md:col-2">
+                    <span class="p-float-label">
+                        <p-calendar dateFormat="dd/mm/yy" [readonlyInput]="true" formControlName="service_start_date"
+                            [showIcon]="true" placeholder="Selecciona una fecha" inputId="icon"
+                            (onSelect)="calcMinFinishDate($event)">
+                        </p-calendar>
+                        <label>Fecha inicio servicio</label>
+                    </span>
+                </div>
+
+                <!-- Fecha fin de servicio -->
+                <div class="col-12 md:col-2">
+                    <span class="p-float-label">
+                        <p-calendar dateFormat="dd/mm/yy" [readonlyInput]="true" formControlName="service_finish_date"
+                            placeholder="Selecciona una fecha" [showIcon]="true" inputId="icon" [minDate]="minFinishDate">
+                        </p-calendar>
+                        <label>Fecha fin servicio</label>
+                    </span>
+                </div>
+              </div>
+              <!--DATA DE DETALLES (SERVICIO-GRUPO-DETALLE OPETARIVO)-->
+              <div class="col-12 grid align-items-center table-liquidation-head">
+                <div class="col-12 md:col-4 ">
+                  Detalle operativo
+                </div>
+                <div class="col-12 md:col-1 text-center">
+                  Medida
+                </div>
+                <div class="col-12 md:col-2 text-center">
+                  Tarifa
+                </div>
+                <div class="col-12 md:col-1 text-center">
+                  Cantidad
+                </div>
+                <div class="col-12 md:col-2 text-center">
+                  Subtotal
+                </div>
+                <div class="col-12 md:col-2 text-center">
+                  Opciones
+                </div>
+              </div>
+              <!-- Cuentas contables /Detalle -->
+              <div formArrayName="rates_detail" class="grid justify-content-center col-12 md:col-12 pt-1 test" style="overflow-y: auto; max-height: 25rem;width: 98%;">
+                  <div class="col-12 pt-4 justify-content-center " *ngFor="let service of liquidation?.liquidation_detail; let indexOfelement = index;">
+
+                    <div class="col-12 md:col-12 pb-0 pt-0 grid align-items-center px-3">
+                        <span class="font-semibold text-lg" [style]="{'font-size': '21px !important'}">{{service.service_description}} ({{service.product_description}})</span>
+                        <button
+                            pButton 
+                            pRipple
+                            type="button"
+                            class="p-button-text mb-2 right-aligned-button table-liquidation-add-detail p-button-option"
+                            pTooltip="Crear detalle operativo"
+                            [style]="{'margin-bottom': '0px !important'}"
+                            (click)="registerOperationalDetail(service)">
+                            <i class="pi pi-plus-circle custom-icon"></i>
+                        </button>
+                    </div>
+
+                    <div *ngIf="service.lstliquidationdetailgroup">
+                        <div *ngFor="let group of service.lstliquidationdetailgroup; let groupIndex = index" class="table-liquidation-group mb-2">
+
+                            <ng-container>
+                            <div>
+                                <div class="grid align-items-center" [style]="{'border-bottom': '1px solid #dbdbdb !important'}">
+
+                                    <ng-container >
+                                        <div class="col-12 md:col-10">
+                                            <button *ngIf="group.id_group"
+                                                pButton pRipple
+                                                [label]="group.group_name"
+                                                class="p-button-text font-bold col-12  w-auto mb-2 table-b-liquidation-detail "
+                                                [pTooltip]="group.isOpen ? 'Ocultar servicios' : 'Mostrar servicios'"
+                                                [icon]="group.isOpen ? 'pi pi-angle-down' : 'pi pi-angle-up'"
+                                                type="button"
+                                                (click)="group.isOpen = !group.isOpen"
+                                                iconPos="right"
+                                                [style]="{'margin-bottom': '0px !important','font-size': '18px !important'}">
+                                            </button>
+
+                                            <!-- <button
+                                                pButton pRipple
+                                                class="p-button-text mb-2 right-aligned-button table-liquidation-add-detail"
+                                                pTooltip="Agregar detalle operativo"
+                                                [style]="{'margin-bottom': '0px !important'}"
+                                                (click)="registerOperationalDetail(service)">
+                                                <i class="pi pi-plus-circle custom-icon"></i>
+                                            </button> -->
+                                        </div>
+
+                                        <div class="col-12 md:col-2 text-right">
+                                            <button
+                                                pButton
+                                                pRipple
+                                                class="p-button-text p-button-icon-only p-button-option"
+                                                [style]="{'margin-bottom': '0px !important'}"
+                                                pTooltip="Eliminar Grupo"
+                                                type="button"
+                                                (click)="deleteGroup(group.group_name,indexOfelement, groupIndex, 0,0)">
+                                                <i class="pi pi-trash table-liquidation-delete-detail"></i>
+                                            </button>
+                                        </div>
+
+                                    </ng-container>
+                                </div>
+                            </div>
+                            </ng-container>
+
+                            <ng-container *ngIf="!group.isOpen">
+
+                                <div *ngFor="let rates of group.lstliquidationdetails; let ratesIndex = index ;let last=last">
+
+                                    <div *ngIf="rates_detail.controls[rates.formIndex]" [formGroupName]="rates.formIndex"
+                                        class="grid align-items-center table-liquidation-detail">
+
+                                        <ng-container *ngIf="!rates.showFiles">
+
+                                            <!-- Detalle Operativo -->
+                                            <div class="col-12 md:col-4">
+                                                <div class="pt-2">{{rates.operational_detail_description}}</div>
+                                            </div>
+
+                                            <!-- Medida -->
+                                            <div class="col-12 md:col-1 text-center">
+                                                <div class="pt-2">{{rates.unit_measure_description}}</div>
+                                            </div>
+
+                                            <!-- Tarifa Normal -->
+                                            <div *ngIf="rates.code_type_rate != typeRate.EDITABLE"
+                                                    class="col-12 md:col-2 text-center">
+                                                    <span class="text-gray-700">Tarifa {{rates.code_type_rate == typeRate.RANGO ? 'por Rango':''}}</span>
+                                                    <div class="pt-2">{{isDollarSelected? '$' : 'S/'}}
+                                                        {{rates_detail.controls[rates.formIndex].get("operational_detail_price").value ?? '0.00'| number : '1.2-3'}}
+                                                    </div>
+                                            </div>
+
+                                            <!-- Tarifa Editable-->
+                                            <div *ngIf="rates.code_type_rate == typeRate.EDITABLE"
+                                                class="col-12 md:col-2 flex justify-content-center">
+                                                <div class="p-float-label w-6">
+                                                    <p-inputNumber class=" align-self-start"
+                                                        formControlName="operational_detail_price"
+                                                        inputId="{{isDollarSelected? 'currency-us' : 'currency-pen'}}"
+                                                        mode="currency"
+                                                        currency="{{isDollarSelected? 'USD' : 'PEN'}}"
+                                                        locale="{{isDollarSelected? 'en-US' : 'es-PE'}}"
+                                                        [minFractionDigits]="2"
+                                                        [maxFractionDigits]="3"
+                                                        [min]="0"
+                                                        (onInput)="calcSubTotalByRate($event.value, rates.formIndex)"
+                                                        autocomplete="false"
+                                                        ></p-inputNumber>
+                                                    <label class="text-700">Tarifa editable</label>
+                                                    <error-message [formControlError]="rates_detail.controls[rates.formIndex].get('operational_detail_price')"></error-message>
+                                                </div>
+                                            </div>
+
+                                            <!-- Cantidad -->
+                                            <div class="col-12 md:col-1 ">
+                                                <div class="p-float-label align-self-start">
+                                                    <p-inputNumber class=" align-self-start"
+                                                        formControlName="quantity"
+                                                        [minFractionDigits]="2"
+                                                        [maxFractionDigits]="3"
+                                                        locale="es-PE"
+                                                        [min]="0"
+                                                        (onInput)="calcSubtotalByTypeRateQuantity($event, rates.formIndex, rates.code_type_rate,inputNumber)"
+                                                        #inputNumber
+                                                    ></p-inputNumber>
+                                                    <label class="text-500">Cantidad</label>
+                                                    <error-message [formControlError]="rates_detail.controls[rates.formIndex].get('quantity')"></error-message>
+                                                </div>
+                                            </div>
+
+                                            <!-- Sub Total -->
+                                            <div class="col-12 md:col-2">
+                                                <div class="text-center  py-2">
+                                                    <label type="number">{{isDollarSelected? '$' : 'S/'}}
+                                                        {{rates_detail.controls[rates.formIndex].get("total_price").value
+                                                        | number : '1.2-2'}}</label>
+                                                </div>
+                                            </div>
+
+                                            <!-- Opciones -->
+                                            <div class="col-12 md:col-2 text-right">
+
+                                                <button
+                                                    *ngIf="!rates_detail.controls[rates.formIndex].get('filesBlob').value?.length && rates_detail.controls[rates.formIndex].get('filesBlob').value?.length"
+                                                    pButton 
+                                                    pRipple
+                                                    class="p-button-text p-button-icon-only p-button-option"
+                                                     pTooltip="Agregar sustento"
+                                                    type="button"
+                                                    (click)="rates.showFiles = true; showFileExplorer(fileUpload)">
+                                                    <i class="pi pi-file-import"></i>
+                                                </button>
+
+                                                <button
+                                                    *ngIf="rates_detail.controls[rates.formIndex].get('filesBlob').value?.length && rates_detail.controls[rates.formIndex].get('filesBlob').value?.length"
+                                                    pButton 
+                                                    pRipple
+                                                    class="p-button-text p-button-icon-only p-button-option"
+                                                    pTooltip="Descargar adjunto"
+                                                    type="button"
+                                                    (click)="downloadFilesBlob(rates.formIndex)">
+                                                    <i class="pi pi-file-export"></i>
+                                                    &nbsp;{{rates_detail.controls[rates.formIndex].get("filesBlob").value?.length}}
+                                                </button>
+
+                                                <button
+                                                    *ngIf="rates_detail.controls[rates.formIndex].get('filesBlob').value?.length && rates_detail.controls[rates.formIndex].get('filesBlob').value?.length"
+                                                    pButton 
+                                                    pRipple 
+                                                    class="p-button-text p-button-icon-only p-button-option"
+                                                    pTooltip="Eliminar adjunto"
+                                                    type="button"
+                                                    (click)="removeTotalFile(rates.formIndex, fileUpload)">
+                                                    <i class="pi pi-file-import"></i>&nbsp;X
+                                                </button>
+
+                                                <button
+                                                    *ngIf="!rates_detail.controls[rates.formIndex].get('files').value?.length && !rates_detail.controls[rates.formIndex].get('filesBlob').value?.length"
+                                                    pButton
+                                                     pRipple
+                                                    class="p-button-text p-button-icon-only p-button-option"
+                                                    pTooltip="Agregar sustento"
+                                                    type="button"
+                                                    (click)="rates.showFiles = true; showFileExplorer(fileUpload)">
+                                                    <i class="pi pi-file-import"></i>
+                                                </button>
+
+                                                <button
+                                                    *ngIf="rates_detail.controls[rates.formIndex].get('files').value?.length && !rates_detail.controls[rates.formIndex].get('filesBlob').value?.length"
+                                                    pButton 
+                                                    pRipple
+                                                    class="p-button-text p-button-icon-only p-button-option" 
+                                                    pTooltip="Descargar adjunto"
+                                                    type="button"
+                                                    (click)="downloadFiles(rates.formIndex)">
+                                                    <i class="pi pi-file-export"></i>
+                                                    &nbsp;{{rates_detail.controls[rates.formIndex].get("files").value?.length}}
+                                                </button>
+
+                                                <button
+                                                    *ngIf="rates_detail.controls[rates.formIndex].get('files').value?.length && !rates_detail.controls[rates.formIndex].get('filesBlob').value?.length"
+                                                    pButton 
+                                                    pRipple  
+                                                    class="p-button-text p-button-icon-only p-button-option"
+                                                    pTooltip="Eliminar adjunto"
+                                                    type="button"
+                                                    (click)="removeTotalFile(rates.formIndex, fileUpload)">
+                                                    <i class="pi pi-file-import"></i>&nbsp;X
+                                                </button>
+
+                                                <button
+                                                    pButton pRipple
+                                                    class="p-button-text p-button-icon-only p-button-option" 
+                                                    pTooltip="Agregar comentario"
+                                                    type="button"
+                                                    (click)="true">
+                                                    <i class="pi pi-comments"></i>
+                                                </button>
+
+                                                <button
+                                                    pButton pRipple
+                                                    class="p-button-text p-button-icon-only p-button-option"
+                                                    pTooltip="Eliminar detalle Operativo"
+                                                    type="button"
+                                                    (click)="deleteOperationalDetail(indexOfelement, groupIndex, ratesIndex,rates.formIndex)">
+                                                <i class="pi pi-trash"></i>
+                                            </button>
+
+                                            </div>
+                                        </ng-container>
+
+                                        <div [hidden]="!rates.showFiles" class="w-full relative">
+                                            <p-fileUpload #fileUpload [maxFileSize]="10000000" [fileLimit]="1"
+                                                [multiple]="false" mode="advanced" name="files" accept=".pdf,.xlsx"
+                                                (onSelect)="addFiles($event, rates.formIndex)"
+                                                (onRemove)="removeFile($event, rates.formIndex)" [customUpload]="true">
+                                            </p-fileUpload>
+                                            <div class="file-upload-label">
+                                                Arrastre el archivo para adjuntar
+                                            </div>
+                                            <span *ngIf="rates_detail.controls[rates.formIndex].get('files').value?.length < 1"
+                                                class="add-files pi pi-plus" pTooltip="Agregar archivos"
+                                                (click)="showFileExplorer(fileUpload)">
+                                            </span>
+                                            <span *ngIf="rates_detail.controls[rates.formIndex].get('files').value?.length < 2"
+                                                class="file-upload-save pi pi-save" pTooltip="Guardar cambios"
+                                                (click)="rates.showFiles = false">
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </ng-container>
+
+                        </div>
+                      </div>
+
+                  </div>
+              </div>
+
+          </form>
+          <div class="col-3 text-left p-3">
+              <span
+                  *ngIf="rates_detail.controls.length > 0"
+                  class="span-total-liquidation w-auto text-center border-none focus-visible-eraser m-3 px-5">
+                  <label
+                      type="number"
+                      class="font-semibold text-lg"
+                      [style]="{'font-size': '20px !important'}">Liquidación Total: {{isDollarSelected? '$' : 'S/'}}
+                      {{formBodySettlement.get("total_price").value ?? '0.00' | number: '1.2-2'}}
+                  </label>
+              </span>
+          </div>
+
+          <div *ngIf="rates_detail.controls" class="col-9 text-right p-3">
+              <button
+                  pButton
+                  class="b-primary w-auto text-center focus-visible-slope m-3 px-5 focus-visible-general"
+                  label="Crear Servicio"
+                  type="button"
+                  (click)="registerService()">
+              </button>
+              <button
+                  pButton
+                  class="b-transparent w-auto text-center focus-visible-eraser m-3 px-5"
+                  label="Guardar como Borrador"
+                  (click)="updateLiquidation(id,'SL01')">
+              </button>
+              <button
+                  pButton
+                  class="b-primary w-auto text-center focus-visible-slope m-3 px-5 focus-visible-general"
+                  label="Guardar como Pendiente"
+                  (click)="updateLiquidation(id,'SL03')"
+                  [disabled]="isDisabledRegister">
+              </button>
+          </div>
+      </div>
+    </div>
+
+
+
+
+</div>

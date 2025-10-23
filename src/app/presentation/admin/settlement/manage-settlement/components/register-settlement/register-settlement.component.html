@@ -1,0 +1,525 @@
+<div class="grid justify-content-center p-fluid">
+    <p-card [style]="{'width': '25rem', 'margin-bottom': '2em','border-radius': '1rem'}" class="col-12 md:col-12 w-full">
+      <ng-template pTemplate="header">
+        <div class="header-card w-full h-4rem flex">
+          <h2 class="col-6 md:col-6 align-self-center pl-4">Crear Liquidación</h2>
+          <div class="col-6 md:col-6 text-right align-self-center pr-4">
+          </div>
+        </div>
+      </ng-template>
+      <ng-template pTemplate="footer">
+        <form [formGroup]="formHeadSettlement">
+            <div class="grid col-12 md:col-12">
+              <div class="grid col-12 md:col-10 p-fluid justify-content-center py-2 mb-2 px-0 card">
+
+                  <!-- Empresa -->
+                  <div class="col-12 md:col-2">
+                      <span class="p-float-label">
+                          <p-dropdown
+                              [class]="validateService.validate(formHeadSettlement.controls['company_id'])"
+                              [options]="companies"
+                              [autoDisplayFirst]="false"
+                              [showClear]="true"
+                              optionLabel="name"
+                              optionValue="id"
+                              formControlName="company_id"
+                              (onChange)="onChangeCompany()"
+                              (onChange)="getRates()">
+                          </p-dropdown>
+                          <label>Empresa</label>
+                      </span>
+                        <error-message
+                            *ngIf="formHeadSettlement?.controls?.['company_id']"
+                            [formControlError]="formHeadSettlement.controls['company_id']">
+                        </error-message>
+                      <!-- <error-message [formControlError]="formHeadSettlement.controls['company_id']"></error-message> -->
+                  </div>
+
+                  <!-- Sucursal -->
+                  <div class="col-12 md:col-2">
+                      <span class="p-float-label">
+                          <p-dropdown
+                              [class]="validateService.validate(formHeadSettlement.controls['branch_office_id'])"
+                              [options]="branchOffice"
+                              [autoDisplayFirst]="false"
+                              optionLabel="name"
+                              optionValue="id"
+                              formControlName="branch_office_id"
+                              [showClear]="true"
+                              (onChange)="onChangeBranch()"
+                              (onChange)="getRates()">
+                          </p-dropdown>
+                          <label>Sucursal</label>
+                      </span>
+                      <!-- <error-message [formControlError]="formHeadSettlement.controls['branch_office_id']"></error-message> -->
+                        <error-message
+                            *ngIf="formHeadSettlement?.controls?.['branch_office_id']"
+                            [formControlError]="formHeadSettlement.controls['branch_office_id']">
+                        </error-message>
+                  </div>
+
+                  <!-- Unidad -->
+                  <div class="col-12 md:col-2">
+                      <span class="p-float-label">
+                          <p-dropdown
+                              [class]="validateService.validate(formHeadSettlement.controls['business_unit_id'])"
+                              [options]="units"
+                              [autoDisplayFirst]="false"
+                              optionLabel="name"
+                              optionValue="id"
+                              formControlName="business_unit_id"
+                              [showClear]="true"
+                              (onChange)="onChangeUnit()"
+                              (onChange)="getRates()">
+                          </p-dropdown>
+                          <label>Unidad</label>
+                      </span>
+                      <!-- <error-message [formControlError]="formHeadSettlement.controls['business_unit_id']"></error-message> -->
+                        <error-message
+                            *ngIf="formHeadSettlement?.controls?.['business_unit_id']"
+                            [formControlError]="formHeadSettlement.controls['business_unit_id']">
+                        </error-message>
+                  </div>
+
+                  <!-- Almacen -->
+                  <div class="col-12 md:col-2">
+                      <span class="p-float-label">
+                          <p-dropdown
+                              [class]="validateService.validate(formHeadSettlement.controls['store'])"
+                              [options]="storeList"
+                              [autoDisplayFirst]="false"
+                              optionLabel="name"
+                              optionValue="id"
+                              formControlName="store"
+                              [showClear]="true"
+                              (onChange)="getRates()">
+                          </p-dropdown>
+                          <label>Producto<!--Almacen--></label>
+                      </span>
+                        <error-message
+                            *ngIf="formHeadSettlement?.controls?.['store']"
+                            [formControlError]="formHeadSettlement.controls['store']">
+                        </error-message>
+                      <!-- <error-message [formControlError]="formHeadSettlement.controls['store']"></error-message> -->
+                  </div>
+
+                  <!-- Cliente -->
+                  <div class="col-12 md:col-2">
+                      <span class="p-float-label">
+                          <!-- <p-dropdown
+                              [class]="validateService.validate(formHeadSettlement.controls['client_id'])"
+                              [options]="clients"
+                              [autoDisplayFirst]="false"
+                              [showClear]="true"
+                              [filter]="true"
+                              optionLabel="business_Name"
+                              optionValue="id"
+                              formControlName="client_id"
+                              emptyMessage="No hay datos para mostrar"
+                              emptyFilterMessage="Sin resultados"
+                              (onFilter)="getClientByName($event.filter)"
+                              (onChange)="getRates()">
+                          </p-dropdown> -->
+                            <p-autoComplete
+                                [delay]="0"
+                                class="px-0 py-0"
+                                [suggestions]="clientList"
+                                (completeMethod)="getClient($event.query);"
+                                [showEmptyMessage]="true"
+                                [autoHighlight]="true"
+                                [field]="'client_code'"
+                                [minLength]="1"
+                                [maxlength]="120"
+                                emptyMessage="Sin resultados"
+                                formControlName="client"
+                                (onSelect)="getRates()"
+                                [class]="validateService.validate(formHeadSettlement.controls['client'])"
+                                (onClear)="handleClearClient()"
+                                [showClear]="true"
+                                #client_code>
+                            </p-autoComplete>
+                        <!-- (onClear)="getAllSearchPickUp(0)" -->
+                          <label>Cliente</label>
+                      </span>
+                        <error-message
+                            *ngIf="formHeadSettlement?.controls?.['client_id']"
+                            [formControlError]="formHeadSettlement.controls['client_id']">
+                        </error-message>
+                      <!-- <error-message [formControlError]="formHeadSettlement.controls['client_id']"></error-message> -->
+                  </div>
+
+                  <!-- Moneda -->
+                  <div class="col-12 md:col-2">
+                      <span class="p-float-label">
+                          <p-dropdown
+                              [class]="validateService.validate(formHeadSettlement.controls['type_currency_param'])"
+                              [options]="coins"
+                              [showClear]="true"
+                              [autoDisplayFirst]="false"
+                              optionLabel="name"
+                              optionValue="id"
+                              formControlName="type_currency_param"
+                              (onChange)="getRates()"
+                              >
+                          </p-dropdown>
+                          <label>Moneda</label>
+                      </span>
+                        <error-message
+                            *ngIf="formHeadSettlement?.controls?.['type_currency_param']"
+                            [formControlError]="formHeadSettlement.controls['type_currency_param']">
+                        </error-message>
+                      <!-- <error-message [formControlError]="formHeadSettlement.controls['type_currency_param']"></error-message> -->
+                  </div>
+
+              </div>
+            </div>
+        </form>
+      </ng-template>
+    </p-card>
+
+    <ng-container *ngIf="loaderService.opened">
+        <p-skeleton class="col-12 md:col-12" borderRadius="20px" height="40rem"></p-skeleton>
+    </ng-container>
+
+    <div [hidden]="loaderService.opened" [style]="{'width': '25rem', 'margin-bottom': '2em','border': '2px solid #000000 !important','background': 'white','border-radius': '1rem'}" class="col-12 md:col-12 w-full">
+      <div class="grid col-12 md:col-12 justify-content-center" style="margin: 0px;padding: 0px;">
+        <form   [formGroup]="formBodySettlement" class="justify-content-center grid col-12" >
+
+            <div *ngIf="rates_detail.controls.length > 0" class="col-12 pb-2 grid pt-4 px-5 " [style]="{'align-items': 'center'}">
+              <h2 class="col-12 md:col-2 my-0 py-0 font-semibold text-800">Resultados</h2>
+              <h3 class="col-12 md:col-2 my-0 py-0 text-600 font-medium">
+                <span class="font-semibold text-lg"><i class="pi pi-check-circle point-active text-3xl" [style]="{'margin-right': '1rem'}"></i>{{mensaje}}</span>
+              </h3>
+              <div *ngIf="rates_detail.controls.length > 0" class="col-12 md:col-4 my-0 text-center grid">
+
+                  <!-- Soles -->
+                  <div class="col-6 md:col-6 justify-content-end flex pr-4">
+                      <p-radioButton value="1" name="type_currency" pTooltip="Convertir a Soles"
+                          formControlName="type_currency" (onClick)="changeValueDollarSelected(false)"></p-radioButton>
+
+                      <label class="ml-2" for="currencyType_1">Soles</label>
+                  </div>
+
+                  <!-- Dolares -->
+                  <div class="col-6 md:col-6 justify-content-start flex pl-4">
+                      <p-radioButton value="2" name="type_currency" pTooltip="Convertir a Dolares"
+                          formControlName="type_currency" (onClick)="changeValueDollarSelected(true)"></p-radioButton>
+
+                      <label class="ml-2" for="currencyType_2">Dólares  (TC: {{exchangeRate.bank_purchase| number: '1.3-3'}})</label>
+                  </div>
+
+              </div>
+              <!-- Fecha de inicio de servicio -->
+              <div class="col-12 md:col-2">
+                  <span class="p-float-label">
+                      <p-calendar [class]="validateService.validate(formBodySettlement.controls['service_start_date'])"
+                          dateFormat="dd/mm/yy" [readonlyInput]="true" formControlName="service_start_date"
+                          [showIcon]="true" placeholder="Selecciona una fecha" (onSelect)="calcMinFinishDate($event)">
+                      </p-calendar>
+                      <label>Inicio del servicio</label>
+                  </span>
+                  <error-message [formControlError]="formBodySettlement.controls['service_start_date']"></error-message>
+              </div>
+
+              <!-- Fecha fin de servicio -->
+              <div class="col-12 md:col-2">
+                  <span class="p-float-label">
+                      <p-calendar [class]="validateService.validate(formBodySettlement.controls['service_finish_date'])"
+                          dateFormat="dd/mm/yy" [readonlyInput]="true" formControlName="service_finish_date"
+                          placeholder="Selecciona una fecha" [showIcon]="true" [minDate]="minFinishDate">
+                      </p-calendar>
+                      <label>Cierre del servicio</label>
+                  </span>
+                  <error-message [formControlError]="formBodySettlement.controls['service_finish_date']"></error-message>
+              </div>
+            </div>
+            <!--DATA DE DETALLES (SERVICIO-GRUPO-DETALLE OPETARIVO)-->
+            <div *ngIf="list.length"  class="col-12 grid align-items-center table-liquidation-head" style="width: 98%;">
+                <div class="col-12 md:col-4 ">
+                  Detalle operativo
+                </div>
+                <div class="col-12 md:col-1 text-center">
+                  Medida
+                </div>
+                <div class="col-12 md:col-2 text-center">
+                  Tarifa
+                </div>
+                <div class="col-12 md:col-1 text-center">
+                  Cantidad
+                </div>
+                <div class="col-12 md:col-2 text-center">
+                  Subtotal
+                </div>
+                <div class="col-12 md:col-2 text-center">
+                  Opciones
+                </div>
+            </div>
+            <div *ngIf="list.length"
+                formArrayName="rates_detail"
+                class="grid justify-content-center col-12 md:col-12 pt-1 test"
+                style="overflow-y: auto; max-height: 25rem;width: 98%;">
+
+                <div class="col-12 pt-4 justify-content-center " *ngFor="let service of list; let serviceIndex = index">
+
+                    <div class="col-12 md:col-12 pb-0 pt-0 grid align-items-center px-3">
+                        <span class="font-semibold text-lg" [style]="{'font-size': '21px !important','padding-right': '0.5rem'}">{{service.service_description}} ({{service.product_description}})</span>
+                        <button
+                            pButton
+                            pRipple
+                            type="button"
+                            class="p-button-text mb-2 right-aligned-button table-liquidation-add-detail focus-visible-general"
+                            pTooltip="Crear detalle operativo"
+                            (click)="registerOperationalDetail(service)">
+                            <i class="pi pi-plus-circle custom-icon"></i>
+                        </button>
+                      </div>
+
+                    <div *ngIf="service.lstgroups">
+                        <div *ngFor="let group of service.lstgroups; let groupIndex = index" class="table-liquidation-group mb-2">
+
+                            <ng-container>
+                              <div >
+
+                                  <div class="grid align-items-center" [style]="{'border-bottom': '1px solid #dbdbdb !important'}">
+
+                                      <ng-container >
+                                          <div class="col-12 md:col-10">
+                                            <button *ngIf="group.id_group"
+                                                pButton pRipple
+                                                [label]="group.group_name"
+                                                class="p-button-text font-bold col-12  w-auto mb-2 table-b-liquidation-detail "
+                                                [pTooltip]="group.isOpen ? 'Ocultar servicios' : 'Mostrar servicios'"
+                                                [icon]="group.isOpen ? 'pi pi-angle-down' : 'pi pi-angle-up'"
+                                                type="button"
+                                                (click)="group.isOpen = !group.isOpen"
+                                                iconPos="right"
+                                                [style]="{'margin-bottom': '0px !important','font-size': '18px !important'}">
+                                            </button>
+
+                                            <!-- <button
+                                                pButton pRipple
+                                                class="p-button-text mb-2 right-aligned-button table-liquidation-add-detail"
+                                                pTooltip="Agregar detalle operativo"
+                                                [style]="{'margin-bottom': '0px !important'}"
+                                                (click)="registerOperationalDetail(service)">
+                                                <i class="pi pi-plus-circle custom-icon"></i>
+                                            </button> -->
+                                          </div>
+
+                                          <div class="col-12 md:col-2 text-right">
+                                            <button
+                                                pButton
+                                                pRipple
+                                                class="p-button-text p-button-icon-only p-button-option"
+                                                [style]="{'margin-bottom': '0px !important'}"
+                                                pTooltip="Eliminar Grupo"
+                                                type="button"
+                                                (click)="deleteGroup(group.group_name,serviceIndex, groupIndex, 0,0)">
+                                                <i class="pi pi-trash table-liquidation-delete-detail"></i>
+                                            </button>
+                                          </div>
+
+                                      </ng-container>
+                                  </div>
+                              </div>
+                            </ng-container>
+
+                            <ng-container *ngIf="group.isOpen">
+                                <div *ngFor="let rates of group.lstdetails; let ratesIndex = index">
+
+                                    <div *ngIf="rates_detail.controls[rates.formIndex]" [formGroupName]="rates.formIndex"
+                                        class="grid align-items-center table-liquidation-detail">
+
+                                        <ng-container *ngIf="!rates.showFiles">
+
+                                            <!-- Detalle Operativo -->
+                                            <div class="col-12 md:col-4" >
+                                                <div class=" pt-2">{{rates.operational_detail_description}}
+                                                </div>
+                                            </div>
+
+                                            <!-- Medida -->
+                                            <div class="col-12 md:col-1 text-center" >
+                                                <div class=" pt-2">{{rates.unit_measure_description}}</div>
+                                            </div>
+
+                                            <!-- Tarifa Normal-->
+                                            <div *ngIf="rates.code_type_rate != typeRate.EDITABLE"
+                                                class="col-12 md:col-2 text-center">
+                                                <span class="text-gray-700">Tarifa {{rates.code_type_rate == typeRate.RANGO ? 'por Rango':''}}</span>
+                                                <div class=" pt-2">{{isDollarSelected? '$' : 'S/'}}
+                                                    {{rates_detail.controls[rates.formIndex].get("operational_detail_price").value ?? '0.00'
+                                                    | number : '1.2-3'}}</div>
+                                            </div>
+
+                                            <!-- Tarifa Editable-->
+                                            <div *ngIf="rates.code_type_rate == typeRate.EDITABLE "
+                                                class="col-12 md:col-2 flex justify-content-center">
+                                                <div class="p-float-label w-6">
+                                                    <p-inputNumber class=" align-self-start"
+                                                        formControlName="operational_detail_price"
+                                                        inputId="{{isDollarSelected? 'currency-us' : 'currency-pen'}}"
+                                                        mode="currency"
+                                                        currency="{{isDollarSelected? 'USD' : 'PEN'}}"
+                                                        locale="{{isDollarSelected? 'en-US' : 'es-PE'}}"
+                                                        [minFractionDigits]="2"
+                                                        [maxFractionDigits]="3"
+                                                        [min]="0"
+                                                        (onInput)="calcSubTotalByRate($event.value, rates.formIndex)"
+                                                        autocomplete="false"
+                                                        ></p-inputNumber>
+                                                    <label class="text-gray-700">Tarifa editable</label>
+                                                    <error-message [formControlError]="rates_detail.controls[rates.formIndex].get('operational_detail_price')"></error-message>
+                                                </div>
+                                            </div>
+
+                                            <!-- Cantidad -->
+                                            <div class="col-12 md:col-1 ">
+                                              <div class="p-float-label align-self-start">
+                                                  <p-inputNumber class=" align-self-start"
+                                                      formControlName="quantity"
+                                                      [minFractionDigits]="2"
+                                                      [maxFractionDigits]="3"
+                                                      locale="es-PE"
+                                                      [min]="0"
+                                                      (onInput)="calcSubtotalByTypeRateQuantity($event, rates.formIndex, rates.code_type_rate, inputNumber)"
+                                                      #inputNumber
+                                                  ></p-inputNumber>
+                                                  <label class="text-500">Cantidad</label>
+                                                  <error-message
+                                                      [maxLength]="this.maxLengthQuantity" [formControlError]="rates_detail.controls[rates.formIndex].get('quantity')">
+                                                  </error-message>
+                                              </div>
+                                            </div>
+
+                                            <!-- Sub Total -->
+                                            <div  class="col-12 md:col-2">
+                                                <div class="text-center  py-2">
+                                                    <label type="number">
+                                                        {{isDollarSelected? '$' : 'S/'}}
+                                                        {{rates_detail.controls[rates.formIndex].get("total_price").value ?? '0.00'
+                                                        | number : '1.2-2'}}
+                                                    </label>
+                                                </div>
+                                            </div>
+
+                                            <!-- Opciones -->
+                                            <div class="col-12 md:col-2 text-right">
+                                                <button
+                                                    *ngIf="!rates_detail.controls[rates.formIndex].get('files').value?.length"
+                                                    pButton pRipple
+                                                    type="button"
+                                                    class="p-button-text p-button-icon-only p-button-option" pTooltip="Agregar sustento"
+                                                    type="button"
+                                                    (click)="rates.showFiles = true; showFileExplorer(fileUpload)">
+                                                    <i class="pi pi-file-import"></i>
+                                                </button>
+                                                <button
+                                                    *ngIf="rates_detail.controls[rates.formIndex].get('files').value?.length"
+                                                    pButton pRipple
+                                                    class="p-button-text p-button-icon-only p-button-option" pTooltip="Descargar adjunto"
+                                                    type="button"
+                                                    (click)="downloadFiles(rates.formIndex)">
+                                                    <i class="pi pi-file-export"></i>
+                                                    {{rates_detail.controls[rates.formIndex].get("files").value?.length}}
+                                                </button>
+                                                <button
+                                                    *ngIf="rates_detail.controls[rates.formIndex].get('files').value?.length"
+                                                    pButton pRipple  class="p-button-text p-button-icon-only p-button-option"
+                                                    pTooltip="Eliminar adjunto"
+                                                    type="button"
+                                                    (click)="removeTotalFile(rates.formIndex, fileUpload)">
+                                                    <i class="pi pi-file-import"></i>X
+                                                </button>
+                                                <button pButton pRipple
+                                                    class="p-button-text p-button-icon-only p-button-option" pTooltip="Agregar comentario"
+                                                    type="button"
+                                                    (click)="addComment()">
+                                                    <i class="pi pi-comments"></i>
+                                                </button>
+                                                <button pButton pRipple
+                                                    class="p-button-text p-button-icon-only p-button-option"
+                                                    pTooltip="Eliminar detalle Operativo"
+                                                    type="button"
+                                                    (click)="deleteOperationalDetail(serviceIndex, groupIndex, ratesIndex,rates.formIndex)">
+                                                    <i class="pi pi-trash"></i>
+                                                </button>
+                                            </div>
+                                        </ng-container>
+
+                                        <div [hidden]="!rates.showFiles" class="w-full relative">
+                                            <p-fileUpload #fileUpload [maxFileSize]="10000000" [fileLimit]="1"
+                                                [multiple]="false" mode="advanced" name="files" accept=".pdf,.xlsx"
+                                                (onSelect)="addFiles($event, rates.formIndex)"
+                                                (onRemove)="removeFile($event, rates.formIndex)" [customUpload]="true">
+
+                                                <ng-template pTemplate="content">
+                                                    <div class="file-upload-label">
+                                                        Arrastre el archivo para adjuntar
+                                                    </div>
+                                                    <span
+                                                        *ngIf="rates_detail.controls[rates.formIndex].get('files').value?.length < 2"
+                                                        class="add-files pi pi-plus" pTooltip="Agregar archivos"
+                                                        (click)="showFileExplorer(fileUpload)">
+                                                    </span>
+                                                    <span
+                                                        *ngIf="rates_detail.controls[rates.formIndex].get('files').value?.length < 2"
+                                                        class="file-upload-save pi pi-save" pTooltip="Guardar cambios"
+                                                        (click)="rates.showFiles = false">
+                                                    </span>
+                                                </ng-template>
+                                            </p-fileUpload>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </ng-container>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <!--FIN DATA DE DETALLES (SERVICIO-GRUPO-DETALLE OPETARIVO)-->
+        </form>
+
+        <div class="col-3 text-left p-3">
+            <span
+                *ngIf="rates_detail.controls.length > 0"
+                class="span-total-liquidation w-auto text-center border-none focus-visible-eraser m-3 px-5">
+                <label
+                    type="number"
+                    class="font-semibold text-lg"
+                    [style]="{'font-size': '20px !important'}">Liquidación Total: {{isDollarSelected? '$' : 'S/'}}
+                    {{formBodySettlement.get("total_price").value ?? '0.00' | number: '1.2-2'}}
+                </label>
+            </span>
+        </div>
+
+        <div *ngIf="rates_detail.controls" class="col-9 text-right p-3">
+            <button
+                *ngIf="cant == 0|| cant > 0"
+                pButton
+                class="b-primary w-auto text-center focus-visible-slope m-3 px-5 focus-visible-general"
+                label="Crear Servicio"
+                type="button"
+                (click)="registerService()">
+            </button>
+            <button
+                pButton
+                class="b-transparent w-auto text-center focus-visible-eraser m-3 px-5 focus-visible-general"
+                label="Guardar como Borrador"
+                (click)="registerLiquidation('SL01')">
+            </button>
+            <button
+                pButton
+                class="b-primary w-auto text-center focus-visible-slope m-3 px-5"
+                label="Guardar como Pendiente"
+                (click)="registerLiquidation('SL03')"
+                [disabled]="isDisabledRegister">
+            </button>
+        </div>
+      </div>
+    </div>
+
+</div>

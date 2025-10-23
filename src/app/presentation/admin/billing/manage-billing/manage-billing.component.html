@@ -1,0 +1,112 @@
+<div class="px-4 md:px-8 pt-4">
+
+    <form [formGroup]="formBilling">
+        <div class="grid p-fluid">
+
+            <!-- Empresa -->
+            <div class="col-12 md:col-4">
+                <span class="p-float-label">
+                    <p-dropdown [options]="lCompany" [autoDisplayFirst]="false" optionLabel="name" optionValue="id"
+                        [showClear]="true" formControlName="company_id" (onChange)="onChangeCompany()">
+                    </p-dropdown>
+                    <label>Empresa</label>
+                </span>
+            </div>
+
+            <!-- Sucursal -->
+            <div class="col-12 md:col-4">
+                <span class="p-float-label">
+                    <p-dropdown [options]="lBranchOffice" [autoDisplayFirst]="false" [showClear]="true"
+                        optionLabel="name" optionValue="id" formControlName="branch_office_id"
+                        (onChange)="onChangeBranch()">
+                    </p-dropdown>
+                    <label>Sucursal</label>
+                </span>
+            </div>
+
+            <!-- Unidad -->
+            <div class="col-12 md:col-4">
+                <span class="p-float-label">
+                    <p-dropdown [options]="lUnit" [autoDisplayFirst]="false" [showClear]="true" optionLabel="name"
+                        optionValue="id" formControlName="business_unit_id" (onChange)="onChangeUnit()">
+                    </p-dropdown>
+                    <label>Unidad</label>
+                </span>
+            </div>
+        </div>
+    </form>
+
+    <div class="field col-12 text-center">
+        <button pButton class="b-primary px-5 py-2" label="Registrar Factura" (click)="registerBilling()">
+        </button>
+    </div>
+
+    <div class="col-12 md:col-8">
+        <span>{{message}}</span>
+    </div>
+
+    <ng-container *ngIf="loaderService.opened">
+        <p-skeleton class="col-12 md:col-8" borderRadius="20px" height="6.5rem"></p-skeleton>
+        <p-skeleton class="col-12 md:col-8" borderRadius="20px" height="6.5rem"></p-skeleton>
+        <p-skeleton class="col-12 md:col-8" borderRadius="20px" height="6.5rem"></p-skeleton>
+        <p-skeleton class="col-12 md:col-8" borderRadius="20px" height="6.5rem"></p-skeleton>
+    </ng-container>
+
+    <ng-container *ngIf="!loaderService.opened">
+
+        <!-- Listado Clientes -->
+        <p-card *ngFor="let billing of lBilling" class="col-12 md:col-8">
+            <div class="grid">
+
+                <!-- Point Active -->
+                <div class="col-12 md:col-1 flex justify-content-center align-self-center">
+                    <div [class]="billing.status ? 'point-active' : 'point-inactive'"
+                        [pTooltip]="billing.status ? 'Documento Activo' : 'Documento Inactivo'">
+                    </div>
+                </div>
+
+                <!-- Empresa -->
+                <div class="col-12 md:col-3">
+                    <span class="text-500">Empresa</span>
+                    <div class="font-semibold">{{billing.company_name}}</div>
+                </div>
+
+                <!-- Cliente -->
+                <div class="col-12 md:col-2">
+                    <span class="text-500">Cliente</span>
+                    <div class="font-semibold">{{billing.business_name}}</div>
+                </div>
+
+                <!-- Sucursal -->
+                <div class="col-12 md:col-2">
+                    <span class="text-500">Sucursal</span>
+                    <div class="font-semibold">{{billing.branch_office_name}}</div>
+                </div>
+
+                <!-- Sucursal -->
+                <div class="col-12 md:col-2">
+                    <span class="text-500">Unidad de Trabajo</span>
+                    <div class="font-semibold">{{billing.unit_name}}</div>
+                </div>
+
+                <!-- Options -->
+                <div class="col-12 md:col-2 text-center">
+                    <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-text text-500"
+                        pTooltip="Editar Factura"></button>
+                    <button *ngIf="billing.status" pButton pRipple icon="pi pi-times-circle"
+                        class="p-button-rounded p-button-text text-500" pTooltip="Inhabilitar Factura"
+                        (click)="disableBilling(billing.id)">
+                    </button>
+                </div>
+
+            </div>
+        </p-card>
+
+        <!-- Paginacion -->
+        <div class="col-12 pt-4 flex justify-content-end">
+            <p-paginator [first]="first" [rows]="pageSize" [totalRecords]="totalRows"
+                (onPageChange)="onPageChange($event)"></p-paginator>
+        </div>
+    </ng-container>
+
+</div>

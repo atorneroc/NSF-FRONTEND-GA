@@ -1,0 +1,79 @@
+:host ::ng-deep {
+  .iconagregar {
+      border-radius: 50%;
+      border: 3px solid var(--primary-color) !important;
+      display: flex;
+      justify-content: center;
+      width: 30px;
+      height: 30px;
+      margin-right: 10px;
+      color: var(--primary-color) !important;
+  }
+
+  .buttton-notas{
+      background: transparent !important;
+      color: black !important;
+      font-size: 1.2rem !important;
+      padding-left: 0rem !important;
+  }
+
+  .p-button:disabled{
+      opacity: 0.38;
+  }
+
+  .p-button:disabled .iconagregar{
+      border: 3px solid #A3A3A3 !important;
+      color: #A3A3A3 !important;
+  }
+
+  p-inputtextarea,  .p-inputtextarea{
+      border-radius: 12px !important;
+      resize: none !important;
+  }
+
+  .p-tabview .p-tabview-nav li.p-highlight .p-tabview-nav-link {
+      color: #3B82F6;
+  }
+
+  .p-tabview-title {
+      font-size: larger;
+      font-weight: bold;
+  }
+  
+  .tab-secondary .p-tabview .p-tabview-panels {
+      padding-bottom: 0px !important;
+  }
+
+  .p-tabview-nav {
+      border-bottom-width: 1px !important;
+  }
+
+  .p-inputswitch.p-inputswitch-checked .p-inputswitch-slider {
+    background: #0EA70E !important;
+  }
+
+  .p-inputswitch.p-inputswitch-checked .p-inputswitch-slider:before {
+    background: #ffffffff !important;
+    border: 1px solid
+  }
+
+  .p-inputswitch .p-inputswitch-slider:before {
+    border: 1px solid;
+  }
+
+  .p-inputswitch .p-inputswitch-slider {
+    background: #ff565d !important;
+  }
+
+  .p-inputswitch {
+    height: 1.5rem !important;
+  }
+
+  .p-inputswitch .p-inputswitch-slider {
+    border-radius: 1.5rem !important;
+  }
+
+  .text-green-500{
+    color: #f3f5f1 !important;
+  }
+}

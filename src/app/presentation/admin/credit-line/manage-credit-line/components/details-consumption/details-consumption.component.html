@@ -1,0 +1,149 @@
+<div *ngIf="lCreditLines && lCreditLines.length > 0" class="grid md:px-8 md:py-2" style="border: 1px solid;margin-top: 17px;border-radius: 9px;border-color: #c4bbbb;">
+
+        <div class="col-12 md:col-3 flex flex-column py-0 my-0">
+            <span class="col-6 md:col-12 font-bold">Empresa:</span>
+            <span class="col-6 md:col-12">{{lCreditLines?.[0]?.id_Company == SICCSA ? SICCSA_LABEL : SLI_LABEL }}</span>
+        </div>
+
+        <div class="col-12 md:col-3 flex flex-column py-0 my-0">
+            <span class="col-6 md:col-12 font-semibold">Línea de Crédito Otorgada:</span>
+            <span class="col-6 md:col-12">{{lCreditLines[0].amount_Line | number : "1.2-2"}}</span>
+        </div>
+
+        <div class="col-12 md:col-3 flex flex-column py-0 my-0">
+            <span class="col-6 md:col-12 font-semibold">Sobregiro:</span>
+            <span class="col-6 md:col-12">{{lCreditLines[0].overdraft_percentage}}</span>
+        </div>
+        
+        <div class="col-12 md:col-3 flex flex-column py-0 my-0">
+            <span class="col-6 md:col-12 font-semibold" style="margin-top: 24px;"></span>
+            <span class="col-6 md:col-12 status-component text-center" [class]="getStatusToCreditLine(lCreditLines[0].detail_code_status)">
+                {{lCreditLines[0].status}}
+            </span>
+        </div>
+
+        <div class="col-12 md:col-3 flex flex-column py-0 my-0">
+            <span class="col-6 md:col-12 font-semibold">Modalidad de Pago:</span>
+            <span class="col-6 md:col-12">{{lCreditLines[0].modality}}</span>
+        </div>
+
+        <div class="col-12 md:col-3 flex flex-column py-0 my-0">
+            <span class="col-6 md:col-12 font-semibold">Línea de Crédito Disponible:</span>
+            <span class="col-6 md:col-12">{{lCreditLines[0].amount_line_available | number : "1.2-2"}}</span>
+        </div>
+
+        <div class="col-12 md:col-3 flex flex-column py-0 my-0">
+            <span class="col-6 md:col-12 font-semibold">Saldo Disponible:</span>
+            <span class="col-6 md:col-12">{{lCreditLines[0].balance_Amount | number : "1.2-2"}}</span>
+        </div>
+
+</div>
+
+<div class="col-12">
+    <h1 class="text-xl">
+        Detalle de Consumo
+    </h1>
+    <hr>
+</div>
+
+<div  class="grid justify-content-center col-12 md:col-12 lg:col-12 xl:col-12 px-0 pt-1">
+    <div class="col-12 md:col-12">
+        <form [formGroup]="form">
+        <!-- <table class="table">
+            <thead>
+              <tr>
+                <th class="text-center" colspan="7">
+                  Total de elementos: {{ items.length }}
+                </th>
+              </tr>
+              <tr>
+                <th class="text-center">Item</th>
+                <th class="text-center">U.Negocio</th>
+                <th class="text-center">Producto</th>
+                <th class="text-center">T.Documento</th>
+                <th class="text-center">Numero</th>
+                <th class="text-center">Monto</th>
+                <th class="text-center">
+                  <i class="pi" ngClass="text-green-500 pi-check-circle"></i>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of items; let rowIndex = index">
+                <td class="text-center">{{ (rowIndex + 1).toString().padStart(2, '0') }}</td>
+                <td class="text-center">{{ item.unidad }}</td>
+                <td class="text-center">{{ item.producto }}</td>
+                <td class="text-center">{{ item.tipo_orden }}</td>
+                <td class="text-center">{{ item.numero }}</td>
+                <td class="text-center">{{ item.sales_Price_Amount | number: '1.2-2' }}</td>
+                <td class="text-center">
+                  <input
+                    type="checkbox"
+                    [ngStyle]="{ width: '25px' }"
+                    [id]="'checkbox_' + rowIndex"
+                    [checked]="item.selected"
+                    [formControlName]="'checkbox_' + rowIndex"
+                    (change)="onCheckboxChange($event, rowIndex)"
+                  />
+                </td>
+              </tr>
+            </tbody>
+          </table> -->
+          
+        <p-table [value]="items" dataKey="id" editMode="row">
+
+            <ng-template pTemplate="header">
+                <tr>
+                    <th class="text-center" colspan="7">
+                      Total de elementos: {{ items.length }}
+                    </th>
+                  </tr>
+                <tr>
+                    <th class="text-center">Item</th>
+                    <th class="text-center">U.Negocio</th>
+                    <th class="text-center">Producto</th>
+                    <th class="text-center">T.Documento</th>
+                    <th class="text-center">Numero</th>
+                    <th class="text-center">Monto</th>
+                    <th class="text-center">
+                        <i
+                            class="pi"
+                            ngClass="text-green-500 pi-check-circle"
+                        ></i>
+                    </th>
+                </tr>
+            </ng-template>
+
+            <ng-template pTemplate="body" let-item  let-rowIndex="rowIndex">
+                <tr>
+                    <td class="text-center">{{(rowIndex + 1).toString().padStart(2, '0')}}</td>
+                    <td class="text-center">{{ item.unidad }}</td>
+                    <td class="text-center">{{ item.producto }}</td>
+                    <td class="text-center">{{ item.tipo_orden }}</td>
+                    <td class="text-center">{{ item.numero }}</td>
+                    <td class="text-center">{{ item.sales_Price_Amount | number : "1.2-2" }}</td>
+                    <td class="text-center">
+                        <input
+                            type="checkbox"
+                            [ngStyle]="{ width: '25px' }"
+                            [id]="'checkbox_' + rowIndex"
+                            [checked]="item.selected"
+                            [formControlName]="'checkbox_' + rowIndex"
+                            (change)="onCheckboxChange($event, rowIndex)"
+                        />
+                    </td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="footer" class="px-5">
+              <tr class="border-top-1 surface-border">
+                    <td colspan="4"></td>
+                    <td class="text-center"><b>Total Consumo:</b></td>
+                    <td class="text-center"><b>{{creditLineDetailTotal | number : "1.2-2"}}</b></td>
+                </tr>
+            </ng-template>
+        </p-table>
+        </form>
+    </div>
+  </div>
+  
+  

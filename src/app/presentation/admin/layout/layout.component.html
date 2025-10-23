@@ -1,0 +1,39 @@
+<p-sidebar class="layout-sidebar" [(visible)]="display">
+
+
+  <ng-template pTemplate="header">
+      <a class="app-logo">
+          <img src="../../../../assets/img/scharff-blanco.svg" class="w-5">
+      </a>
+  </ng-template>
+
+  <div>
+      <p-panelMenu [model]="items"></p-panelMenu>
+  </div>
+
+</p-sidebar>
+
+<!-- <p-tabMenu class="tab-primary" [model]="items" [activeItem]="activeItem">
+</p-tabMenu> -->
+
+<!-- <div class="md:px-6 py-3">
+    <p-breadcrumb [model]="breadcrumbItems"></p-breadcrumb>
+    <router-outlet></router-outlet>
+</div> -->
+<div class="md:px-8 py-3">
+  <div class="grid pt-4 align-items-center">
+      <div clasS="col-8 flex">
+          <button pButton pRipple icon="pi pi-bars" class="p-button-rounded p-button-text" (click)="display = true">
+          </button>
+          <p-breadcrumb [model]="breadcrumbItems"></p-breadcrumb>
+      </div>
+      <div class="col-4 text-right text-lg">
+        <span class="mr-2">Hola,</span>
+        <span class="text-500 mr-2">{{getName()}}</span>
+        <button pButton pRipple icon="pi pi-sign-out" class="p-button-rounded p-button-text mr-2" (click)="logout()" pTooltip="Cerrar Sesion" >
+        </button>
+        <!-- <i class="pi pi-sign-out"></i> -->
+    </div>
+  </div>
+  <router-outlet></router-outlet>
+</div>

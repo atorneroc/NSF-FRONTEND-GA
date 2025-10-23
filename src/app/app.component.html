@@ -1,0 +1,14 @@
+<router-outlet></router-outlet>
+<p-toast></p-toast>
+<p-confirmDialog
+    [breakpoints]="{'960px': '75vw', '640px': '100vw'}" 
+    [style]="{width: '25vw'}"
+    [closable]="false"
+    acceptLabel="Si"
+    [rejectIcon]="null"
+    [acceptIcon]="null">
+</p-confirmDialog>
+<loader 
+    *ngIf="loaderService.opened" 
+    (close)="loaderService.close()">
+</loader>

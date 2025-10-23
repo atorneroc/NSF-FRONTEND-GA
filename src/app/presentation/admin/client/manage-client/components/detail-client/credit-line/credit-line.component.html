@@ -1,0 +1,75 @@
+<div class="grid md:px-8 md:py-2">
+
+    <div class="col-12">
+        <h1 class="text-2xl">
+            Línea de crédito
+        </h1>
+        <hr>
+    </div>
+
+    <div class="grid text-sm" *ngIf="lCreditLines?.length">
+        <div class="col-12" *ngFor="let creditLine of lCreditLines; let i = index">
+            
+            <!-- División visual -->
+            <div class="mb-3">
+            
+                <!-- Empresa -->
+                <div class="mb-3">
+                    <div class="font-semibold">Empresa:</div>
+                    <div class="text-lg font-medium">{{ creditLine.company_Name }}</div>
+                </div>
+
+                <!-- Campos en filas de 4 por línea -->
+                <div class="flex flex-wrap justify-between">
+
+                    <div class="flex flex-column mb-3 w-full md:w-3">
+                    <span class="font-semibold">Fecha de inicio:</span>
+                    <span>{{ creditLine.start_Date | date: 'dd/MM/yyyy' }}</span>
+                    </div>
+
+                    <div class="flex flex-column mb-3 w-full md:w-3">
+                    <span class="font-semibold">Modalidad de Pago:</span>
+                    <span>{{ creditLine.modality }}</span>
+                    </div>
+
+                    <div class="flex flex-column mb-3 w-full md:w-3">
+                    <span class="font-semibold">Moneda:</span>
+                    <span>{{ creditLine.money }}</span>
+                    </div>
+
+                    <div class="flex flex-column mb-3 w-full md:w-3">
+                    <span class="font-semibold">Línea de crédito otorgada:</span>
+                    <span>{{ creditLine.money === 'Soles' ? 'S/' : '$' }} {{ creditLine.amount_Line | number: '1.2-2' }}</span>
+                    </div>
+
+                    <div class="flex flex-column mb-3 w-full md:w-3">
+                    <span class="font-semibold">Consumo:</span>
+                    <span>{{ creditLine.money === 'Soles' ? 'S/' : '$' }} {{ creditLine.amount_Consumption | number: '1.2-2' }}</span>
+                    </div>
+
+                    <div class="flex flex-column mb-3 w-full md:w-3">
+                    <span class="font-semibold">Sobregiro:</span>
+                    <span>{{ creditLine.overdraft }}{{ creditLine.overdraft && creditLine.overdraft !== 0 ? '%' : '' }}</span>
+                    </div>
+
+                    <div class="flex flex-column mb-3 w-full md:w-3">
+                    <span class="font-semibold">Saldo:</span>
+                    <span>{{ creditLine.money === 'Soles' ? 'S/' : '$' }} {{ creditLine.amount_Balance | number: '1.2-2' }}</span>
+                    </div>
+
+                    <div class="flex flex-column mb-3 w-full md:w-3">
+                    <span class="font-semibold">Estado:</span>
+                    <span>{{ creditLine.status }}</span>
+                    </div>
+
+                </div>
+
+                <!-- Línea divisoria -->
+                <hr *ngIf="i < lCreditLines.length - 1" class="my-3 border-gray-300" />
+
+            </div>
+        </div>
+    </div>
+
+
+</div>

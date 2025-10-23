@@ -1,0 +1,219 @@
+<div class="grid justify-content-center">
+	<p-card [style]="{'width': '25rem', 'margin-bottom': '2em'}" class="col-12 md:col-12 w-full pb-0">
+		<ng-template pTemplate="header">
+			<div class="header-card w-full h-4rem flex">
+				<h2 class="col-6 md:col-6 align-self-center pl-4">Clientes</h2>
+				<div class="col-6 md:col-6 text-right align-self-center pr-4">
+					<button
+						pButton
+						(click)="registerClient()"
+						class="b-primary px-5 py-2 focus-visible-general"
+						label="Crear Cliente"
+					></button>
+				</div>
+			</div>
+		</ng-template>
+
+		<ng-template pTemplate="footer">
+			<form [formGroup]="formFilterClient">
+				<div class="grid col-12 md:col-12">
+					<!-- BUSQUEDA DE CLIENTE -->
+					<div class="grid col-12 md:col-8 p-fluid justify-content-center pb-5 pt-3 px-0">
+						<span class="p-float-label p-input-icon-right w-full">
+							<i class="pi pi-search pr-3"></i>
+							<input
+								class="search w-full ellipsis"
+								[formControl]="filter"
+								pInputText
+								(keyup)="getClientByTerm($event)"/>
+							<label>¿Buscas un cliente?</label>
+						</span>
+					</div>
+
+					<div class="grid col-12 md:col-8 p-fluid justify-content-center py-2 mb-2 px-0 card">
+						<!-- Empresa -->
+						<div class="custom-col-2">
+							<span class="p-float-label">
+								<p-dropdown
+									id="company_id"
+									[options]="lCompany"
+									[showClear]="true"
+									optionLabel="name"
+									optionValue="id"
+									placeholder="Selecciona una opción."
+									(onChange)="getAllClients(0)"
+									formControlName="company_id"
+								></p-dropdown>
+								<label>Empresa</label>
+							</span>
+						</div>
+
+						<!-- Tipo de Cliente -->
+						<div class="custom-col-2">
+							<span class="p-float-label">
+								<p-dropdown
+									id="type_client"
+									[options]="lTypesClient"
+									[showClear]="true"
+									optionLabel="description"
+									optionValue="id"
+									placeholder="Selecciona una opción."
+									(onChange)="getAllClients(0)"
+									formControlName="type_client"
+								></p-dropdown>
+								<label>Tipo de Cliente</label>
+							</span>
+						</div>
+
+						<!-- Estado linea de credito-->
+						<div class="custom-col-2">
+							<span class="p-float-label">
+								<p-dropdown
+									id="status_credit_line"
+									[options]="lStatusCreditLine"
+									[showClear]="true"
+									optionLabel="description"
+									optionValue="detail_code"
+									placeholder="Selecciona una opción."
+									(onChange)="getAllClients(0)"
+									formControlName="status_credit_line"
+								></p-dropdown>
+								<label>Estado de crédito</label>
+							</span>
+						</div>
+
+						<!-- Estado SAP  -->
+						<div class="custom-col-2">
+							<span class="p-float-label">
+								<p-dropdown
+									id="status_sap"
+									[options]="lStatusSAP"
+									optionLabel="description"
+									[showClear]="true"
+									optionValue="id"
+									placeholder="Selecciona una opción."
+									(onChange)="getAllClients(0)"
+									formControlName="status_sap"
+								></p-dropdown>
+								<label>Estado SAP</label>
+							</span>
+						</div>
+
+						<!-- LIMPIAR FILTROS -->
+						<div class="custom-col-1 p-fluid justify-content-center">
+							<button
+								pButton
+								pRipple
+								icon="pi pi-trash"
+								class="p-button-rounded p-button-text text-color"
+								pTooltip="Limpiar filtros"
+								(click)="clearFilterClient()"
+							></button>
+						</div>
+					</div>
+				</div>
+			</form>
+		</ng-template>
+	</p-card>
+
+	<ng-container *ngIf="loaderService.opened">
+		<p-skeleton
+			class="col-12 md:col-12"
+			borderRadius="20px"
+			height="30rem"
+		></p-skeleton>
+	</ng-container>
+
+	<div *ngIf="!loaderService.opened" class="col-12 md:col-12 mt-0 pt-0">
+
+		<div class="col-12 pb-4 flex flex-row pt-0">
+			<h2 class="col-6 md:col-6 my-0 py-0 font-semibold text-800">Resultados</h2>
+			<h3 class="col-6 md:col-6 my-0 py-0 text-600 flex justify-content-end align-self-end font-medium">{{ mensaje }}</h3>
+		</div>
+
+		<p-table [value]="lClients" class="mx-0 px-0"  styleClass="p-datatable-m" [scrollable]="true" scrollHeight="370px" [tableStyle]="{'min-width': '20rem'}">
+			<ng-template pTemplate="header">
+				<tr>
+					<th class="text-center" colspan="2">Cód. único</th>
+					<th class="text-center">T. Documento</th>
+					<th class="text-center">Nº Documento</th>
+					<th class="text-center">Razón social</th>
+					<th class="text-center">T. Cliente</th>
+					<th class="text-center">Línea de crédito</th>
+					<th class="text-center">Cód.SAP</th>
+					<th class="text-center">SAP</th>
+					<th class="text-center">Opciones</th>
+				</tr>
+			</ng-template>
+
+			<ng-template pTemplate="body" let-client>
+				<tr>
+					<td class="font-semibold text-center">
+						<i
+							[class]="
+								'pi pi-circle-fill ' +
+								(client.status ? 'point-active' : 'point-inactive')
+							"
+							[pTooltip]="
+								client.status ? 'Cliente Habilitado' : 'Cliente Inhabilitado'
+							"
+						></i>
+					</td>
+					<td><span class="p-column-title">Código único</span>{{ client.id }}</td>
+					<td class="ellipsis max-w-13rem" [pTooltip]="client.identity_Card_Type_Description | uppercase">{{ client.identity_Card_Type_Description | uppercase }}</td>
+					<td>{{ client.identity_Card_Number }}</td>
+					<td class="ellipsis max-w-20rem" [pTooltip]="client.business_Name | uppercase">{{ client.business_Name | uppercase}}</td>
+					<td class="text-center">{{ client.type_Client_Description | uppercase}}</td>
+					<td class="text-center">
+						<div class="flex flex-row justify-content-center">
+							<span class="align-self-center mr-2">SLI</span>
+							<div class="status-component" [class]="getStatusClient(client.statusScharff)">{{client.scharff | uppercase}}</div>
+							<span class="align-self-center mx-2">SICCSA</span>
+							<div class="status-component" [class]="getStatusClient(client.statusFedex)">{{client.fedex | uppercase}}</div>
+						</div>
+					</td>
+					<td class="text-center">{{client.id_Sap}}</td>
+					<td class="text-center">
+						<div class="status-component" [class]="statusSAP(client.sap_Status_Description)">{{client.sap_Status_Description | uppercase}}</div>
+					</td>
+					<td class="text-center">
+						<button
+                            pButton
+                            class="p-button-text"
+                            (click)="menu.toggle($event	); getOptionsByStatus(client)"
+                            icon="pi pi-ellipsis-v">
+                        </button>
+                        <p-menu
+                            #menu
+                            [model]="options"
+                            [popup]="true"
+                            appendTo="body">
+                        </p-menu>
+					</td>
+				</tr>
+			</ng-template>
+		</p-table>
+	</div>
+
+	<div class="col-12 md:col-6 align-items-center grid pt-0 mt-0">
+        <p-dropdown
+                [options]="pageSizeOptions"
+                (onChange)="onPageSizeChange($event.value);
+                getAllClients(0)">
+        </p-dropdown>
+        <div class="pl-4">
+            <span>
+                Mostrando el intervalo del {{pageSize * pageNumber + 1}} - {{(pageSize * (pageNumber + 1)) > totalRows ? totalRows : (pageSize * (pageNumber + 1))}} de {{totalRows}} resultados.
+            </span>
+        </div>
+    </div>
+
+    <div class="col-12 md:col-6 pt-0 mt-0">
+        <p-paginator
+            [rows]="pageSize"
+            [totalRecords]="totalRows"
+            (onPageChange)="getAllClients($event.page)"
+        ></p-paginator>
+    </div>
+
+</div>
