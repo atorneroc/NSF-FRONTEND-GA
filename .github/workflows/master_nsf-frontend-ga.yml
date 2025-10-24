@@ -75,6 +75,6 @@ jobs:
         with:
           app-name: 'nsf-frontend-ga'      # 🔹 Cambia por el nombre de tu App Service
           slot-name: 'production'
-          package: ./dist
+          package: ./dist/scharff.frontend.facturacion
           runtime-stack: 'NODE|20-lts'
           startup-command: 'pm2 serve /home/site/wwwroot --spa --no-daemon'
