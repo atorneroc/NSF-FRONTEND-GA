@@ -1,0 +1,25 @@
+version: 2
+updates:
+  # 👇 Dependencias npm (Angular)
+  - package-ecosystem: "npm"
+    directory: "/"        # package.json está en la raíz
+    schedule:
+      interval: "weekly"  # puede ser "daily", "weekly", o "monthly"
+    labels: ["dependencies"]
+    # ⚙️ Opcional: ignorar librerías si necesitas versiones fijas
+    ignore:
+      - dependency-name: "@angular/core"
+        update-types: ["version-update:semver-major"] # ignora cambios mayores
+      - dependency-name: "@angular/cli"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "typescript"
+        versions: [">=6.0.0"] # ignora futuras versiones si tu Angular aún no soporta
+    # Opcional: limitar el número de PR abiertos a la vez
+    open-pull-requests-limit: 10
+
+  # 👇 Dependencias de GitHub Actions (para CI/CD)
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    labels: ["dependencies"]
