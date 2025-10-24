@@ -8,6 +8,10 @@ updates:
     labels: ["dependencies"]
     # ⚙️ Opcional: ignorar librerías si necesitas versiones fijas
     ignore:
+      - dependency-name: "primeng"
+        versions: [">=14.2.3"] # ignora cambios mayores
+      - dependency-name: "date-fns"
+        versions: [">=2.29.3"] # ignora cambios mayores
       - dependency-name: "@angular/core"
         update-types: ["version-update:semver-major"] # ignora cambios mayores
       - dependency-name: "@angular/cli"
