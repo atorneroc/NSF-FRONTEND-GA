@@ -60,14 +60,25 @@ export class RegisterBillingCutComponent implements OnInit {
         private _service : BranchService,
     ) { }
 
-    async ngOnInit() {
+    // async ngOnInit() {
 
-        this.createFormClient();
-        await Promise.all([
-            this.getAllCompanies(),
-            this.getAllCourts()
-        ]);
-        this.initFormDetailCourtData();
+    //     this.createFormClient();
+    //     await Promise.all([
+    //         this.getAllCompanies(),
+    //         this.getAllCourts()
+    //     ]);
+    ngOnInit(): void {
+    this.initialize();
+    }
+
+    private async initialize(): Promise<void> {
+    this.createFormClient();
+
+    await Promise.all([
+        this.getAllCompanies(),
+        this.getAllCourts()
+    ]);
+    this.initFormDetailCourtData();
 
         const passedData = this._config?.data;
         if (passedData && Object.keys(passedData).length > 0) {

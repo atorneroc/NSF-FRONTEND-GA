@@ -72,13 +72,26 @@ export class UpdateAddressComponent implements OnInit {
         ]
     }
 
-    async ngOnInit() {
-        this.createFormDirection();
-        await this.getAllTypeDirections();
-        await this.getClientById(this.clienId);
-        this.getUnits();
-        this.getAddressById();
+    // async ngOnInit() {
+    //     this.createFormDirection();
+    //     await this.getAllTypeDirections();
+    //     await this.getClientById(this.clienId);
+    //     this.getUnits();
+    //     this.getAddressById();
+    // }
+
+    ngOnInit(): void {
+        this.initialize();
+        }
+
+    private async initialize(): Promise<void> {
+    this.createFormDirection();
+    await this.getAllTypeDirections();
+    await this.getClientById(this.clienId);
+    this.getUnits();
+    this.getAddressById();
     }
+
 
     createFormDirection() {
         this.formDirection = this._formBuilder.group({
