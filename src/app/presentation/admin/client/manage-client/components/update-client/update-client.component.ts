@@ -86,24 +86,35 @@ export class UpdateClientComponent implements OnInit {
         public validateService: ValidateInputService,
     ) {}
 
-    async ngOnInit() {
-        this.createFormClient()
-        await this.getAllBusinessGroup()
-        this.getAllCoins().then(()=>{
-            this.selectCurrencyType()
-        })
-        this.getEconomicSector()
-        await this.getAllTypeDocumentIdenty()
-        await this.getParentCustomerType()
-        this.getAllSegmentation()
-        this.getAllHolding()
-        //this.getAllCountries();
-        await this.getClientById(this._config.data)
-        await this.getAllCountrieById(this.client.id_Country)
-        this.getListAdditionalData().then(()=>{
-            this.getAdditionalDataClient(this._config.data)
-        })
-    }
+        ngOnInit(): void {
+        this.initialize();
+        }
+
+        private async initialize(): Promise<void> {
+        this.createFormClient();
+
+        await this.getAllBusinessGroup();
+
+        this.getAllCoins().then(() => {
+            this.selectCurrencyType();
+        });
+
+        this.getEconomicSector();
+        await this.getAllTypeDocumentIdenty();
+        await this.getParentCustomerType();
+
+        this.getAllSegmentation();
+        this.getAllHolding();
+        // this.getAllCountries();
+
+        await this.getClientById(this._config.data);
+        await this.getAllCountrieById(this.client.id_Country);
+
+        this.getListAdditionalData().then(() => {
+            this.getAdditionalDataClient(this._config.data);
+        });
+        }
+
 
     createFormClient() {
         this.formClient = this._formBuilder.group({

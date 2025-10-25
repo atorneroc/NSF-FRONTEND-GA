@@ -92,22 +92,31 @@ export class UpdateCreditLineComponent implements OnInit, OnDestroy {
         private _getAllCollectionManager: GetAllCollectionManagerUsecase
     ) { }
 
-    async ngOnInit() {
-        const maxLength = await this.getMaximumMumber();
-        this.maxLengthAmountLineDirect = maxLength;
-        this.getAllStatusCreditLine();
-        this.initFormDetailCourtData()
-        this.idCreditLine = this._config.data.id_CreditLine
-        await this.createFormCreditLine()
-        this.getAllCoins();
-        this.getAllCompanies();
-        await this.getAllModalities();
-        this.getCreditLineById(this.idCreditLine)
-        this.getAllCourts()
-        this.getAllBanks();
-        this.getAllFinancing();
-        this.getAllCollectionManager();
-        this.getChangesForm();
+    ngOnInit(): void {
+    this.initialize();
+    }
+
+    private async initialize(): Promise<void> {
+    const maxLength = await this.getMaximumMumber();
+    this.maxLengthAmountLineDirect = maxLength;
+
+    this.getAllStatusCreditLine();
+    this.initFormDetailCourtData();
+
+    this.idCreditLine = this._config.data.id_CreditLine;
+
+    await this.createFormCreditLine();
+
+    this.getAllCoins();
+    this.getAllCompanies();
+    await this.getAllModalities();
+
+    this.getCreditLineById(this.idCreditLine);
+    this.getAllCourts();
+    this.getAllBanks();
+    this.getAllFinancing();
+    this.getAllCollectionManager();
+    this.getChangesForm();
     }
 
     ngOnDestroy() {

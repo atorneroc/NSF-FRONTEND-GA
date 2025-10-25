@@ -81,9 +81,9 @@ export class DetailsConsumptionComponent implements OnInit, OnDestroy {
         this.form = new FormGroup({});
     }
 
-    async ngOnInit() {
-        this.CreditLineId = this._config.data.CreditLine
-        this.initCreditline();       
+    ngOnInit(): void {
+    this.CreditLineId = this._config.data.CreditLine;
+    this.initCreditline();
     }
 
     async initCreditline(){

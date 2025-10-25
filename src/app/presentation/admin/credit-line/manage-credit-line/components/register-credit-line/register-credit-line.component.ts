@@ -85,22 +85,27 @@ export class RegisterCreditLineComponent implements OnInit, OnDestroy {
         private _branchService: BranchService,
     ) { }
 
-     async ngOnInit() {
-        const maxLength = await this.getMaximumMumber(); 
-        this.maxLengthAmountLineDirect = maxLength;        
-        this.createFormCreditLine();
-        this.filterModality();
-        this.getAllCompanies();
-        this.getAllCoins();
-        this.getAllModalities();
-        this.initFormDetailCourtData()
-        this.getAllCourts()
-        this.getAllCollectionManager();
-        this.getAllBanks()
-        this.getAllFinancing()
-        this.getChangesForm()
-
+    ngOnInit(): void {
+    this.initialize();
     }
+
+    private async initialize(): Promise<void> {
+    const maxLength = await this.getMaximumMumber();
+    this.maxLengthAmountLineDirect = maxLength;
+
+    this.createFormCreditLine();
+    this.filterModality();
+    this.getAllCompanies();
+    this.getAllCoins();
+    this.getAllModalities();
+    this.initFormDetailCourtData();
+    this.getAllCourts();
+    this.getAllCollectionManager();
+    this.getAllBanks();
+    this.getAllFinancing();
+    this.getChangesForm();
+    }
+
 
     ngOnDestroy() {
         if(this.destroySubscribe)  this.destroySubscribe.unsubscribe()
