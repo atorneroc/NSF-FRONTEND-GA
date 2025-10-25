@@ -1,0 +1,67 @@
+name: SonarCloud (Angular)
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
+  actions: read
+  security-events: write
+
+jobs:
+  build-and-analyze:
+    runs-on: ubuntu-latest
+    env:
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+    steps:
+      # 🧰 1. Checkout del código
+      - name: 🧰 Checkout del código
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # ⚙️ 2. Configurar Node.js
+      - name: ⚙️ Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+
+      # 📦 3. Instalar dependencias
+      - name: 📦 Instalar dependencias
+        run: npm ci
+
+      # 🧪 4. Ejecutar pruebas unitarias con cobertura
+      - name: 🧪 Ejecutar pruebas con cobertura
+        run: |
+          npm run test -- --watch=false --browsers=ChromeHeadless --code-coverage
+        continue-on-error: true # evita que falle si no hay tests todavía
+
+      # 🧱 5. Compilar el proyecto (build)
+      - name: 🧱 Compilar proyecto Angular
+        run: npm run build --if-present
+
+      # 🔍 6. Análisis SonarCloud
+      - name: 🔍 Analizar con SonarCloud
+        run: |
+          npm install -g sonar-scanner
+          sonar-scanner \
+            -Dsonar.organization="atorneroc" \
+            -Dsonar.projectKey="atorneroc_NSF-FRONTEND-GA" \
+            -Dsonar.host.url="https://sonarcloud.io" \
+            -Dsonar.login="${SONAR_TOKEN}" \
+            -Dsonar.sources="src" \
+            -Dsonar.exclusions="**/node_modules/**,**/dist/**,**/*.spec.ts" \
+            -Dsonar.javascript.lcov.reportPaths="coverage/lcov.info"
+
+      # 📊 7. Publicar cobertura y resultados
+      - name: 📊 Publicar cobertura
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage

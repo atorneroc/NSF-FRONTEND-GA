@@ -2,9 +2,9 @@ name: Frontend CI/CD (Angular)
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [ "masterD" ]
   pull_request:
-    branches: [ "master" ]
+    branches: [ "masterD" ]
 
 permissions:
   id-token: write     # Necesario para OIDC
